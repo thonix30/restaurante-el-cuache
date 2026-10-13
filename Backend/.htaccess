@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# El header Authorization no siempre llega a PHP en Apache/XAMPP
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Handle Preflight OPTIONS requests for CORS
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ api/v1/index.php [L,QSA]
+
+# API Routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ api/v1/index.php [QSA,L]
+
+# Configuración y código fuente nunca se sirven directo
+RedirectMatch 404 ^.*/Backend/(config|src|storage)/.*$

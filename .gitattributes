@@ -1,0 +1,11 @@
+# Finales de línea normalizados (LF) en el repositorio
+* text=auto eol=lf
+# Binarios: nunca se convierten
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff2 binary

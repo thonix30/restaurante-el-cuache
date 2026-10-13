@@ -1,0 +1,26 @@
+# Dependencias y compilados (se regeneran con npm install / npm run build)
+Frontend/node_modules/
+Frontend/dist/
+Frontend/dev-dist/
+
+# Secretos y configuración de cada instalación
+Backend/config/*.local.php
+.env.local
+.env.*.local
+
+# Archivos subidos y privados (no se versionan)
+Backend/uploads/*
+!Backend/uploads/.htaccess
+Backend/storage/documentos/*
+Backend/storage/asistencia/*
+
+# Material de trabajo local
+capturas/
+*.zip
+.claude/
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

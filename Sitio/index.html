@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>El Cuache · Café y Restaurante en San Antonio Huista, Huehuetenango</title>
+    <meta name="description" content="El Cuache, café y restaurante en San Antonio Huista, Huehuetenango. Cocina de comal y leña, pepián, tamales, atol de elote y café de altura de los Cuchumatanes.">
+    <meta name="theme-color" content="#17110D">
+    <meta property="og:title" content="El Cuache · San Antonio Huista">
+    <meta property="og:description" content="Sabor que nace en los Huistas. Cocina tradicional de Huehuetenango.">
+    <meta property="og:image" content="img/pepian.jpg">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Familjen+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="cargando">
+
+<!-- ═══ Preloader: un hilo que se teje ═══ -->
+<div class="preloader" aria-hidden="true">
+    <div>
+        <div class="preloader__nombre">El Cuache</div>
+        <div class="preloader__lugar">San Antonio Huista</div>
+        <div class="preloader__telar"><div class="preloader__hilo"></div></div>
+    </div>
+</div>
+<div class="cortina" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+<div class="progreso" aria-hidden="true"></div>
+<div class="grano" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor__texto" aria-hidden="true">Ver</div>
+
+<!-- ═══ Navegación (fuera del contenedor suave para quedar fija) ═══ -->
+<header class="nav">
+    <a href="#inicio" class="nav__marca" data-ir>
+        <img src="img/logo-cream.png" alt="">
+        <span>El Cuache<small>San Antonio Huista</small></span>
+    </a>
+    <ul class="nav__links">
+        <li><a href="#pueblo" data-ir>El pueblo</a></li>
+        <li><a href="#cocina" data-ir>Cocina</a></li>
+        <li><a href="#carta" data-ir>La carta</a></li>
+        <li><a href="#fiestas" data-ir>Fiestas</a></li>
+        <li><a href="#visitanos" data-ir>Visítanos</a></li>
+    </ul>
+    <a href="../Frontend/dist/#/carta" class="boton boton--rojo magnetico">Ver la carta</a>
+    <button class="nav__burger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+</header>
+<nav class="menu-movil" aria-label="Menú">
+    <a href="#pueblo" data-ir>El pueblo</a>
+    <a href="#cocina" data-ir>Cocina</a>
+    <a href="#carta" data-ir>La carta</a>
+    <a href="#fiestas" data-ir>Fiestas</a>
+    <a href="#visitanos" data-ir>Visítanos</a>
+    <div class="faja"></div>
+</nav>
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+<main>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="inicio">
+        <div class="hero__foto"><img src="img/pueblo.jpg" alt="Vista de San Antonio Huista entre los cerros de Huehuetenango"></div>
+        <div class="hero__velo"></div>
+        <div class="sello">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+                <defs><path id="circulo" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"/></defs>
+                <text><textPath href="#circulo">Café y Restaurante ✦ San Antonio Huista ✦ Huehuetenango ✦</textPath></text>
+            </svg>
+            <div class="sello__centro"><img src="img/logo-cream.png" alt="Logo de El Cuache, Café y Restaurante"></div>
+        </div>
+        <div class="hero__contenido">
+            <p class="hero__lugar">San Antonio Huista · Huehuetenango</p>
+            <h1 class="hero__titulo">
+                <span class="linea">Sabor que</span>
+                <span class="linea">nace en los</span>
+                <span class="linea acento">Huistas</span>
+            </h1>
+            <p class="hero__bajada">Café y restaurante El Cuache: cocina de comal y leña, recados de fiesta y café de altura, servidos sin prisa como se sirve en casa.</p>
+            <div class="hero__acciones">
+                <a href="#carta" class="boton magnetico" data-ir>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2Z"/><path d="M8 7h6M8 11h6"/></svg>
+                    Lo que hay hoy
+                </a>
+                <a href="#visitanos" class="boton boton--linea magnetico" data-ir>Cómo llegar</a>
+            </div>
+        </div>
+        <div class="hero__scroll" aria-hidden="true">Baja <i></i></div>
+    </section>
+
+    <!-- ═══ Marquesinas ═══ -->
+    <div class="marquesinas" aria-hidden="true">
+        <div class="cinta cinta--roja" data-dir="-1">
+            <div class="cinta__pista"><span>Pepián</span><span>Tamal colorado</span><span>Chuchitos</span><span>Atol de elote</span><span>Tortillas al comal</span><span>Frijol negro</span><span>Café de altura</span></div>
+            <div class="cinta__pista"><span>Pepián</span><span>Tamal colorado</span><span>Chuchitos</span><span>Atol de elote</span><span>Tortillas al comal</span><span>Frijol negro</span><span>Café de altura</span></div>
+        </div>
+        <div class="cinta cinta--maiz" data-dir="1">
+            <div class="cinta__pista"><span>Marimba</span><span>Chirimía</span><span>Fiesta de junio</span><span>Día de plaza</span><span>Leña y barro</span><span>Cuchumatanes</span></div>
+            <div class="cinta__pista"><span>Marimba</span><span>Chirimía</span><span>Fiesta de junio</span><span>Día de plaza</span><span>Leña y barro</span><span>Cuchumatanes</span></div>
+        </div>
+    </div>
+
+    <!-- ═══ La casa: el logo como protagonista ═══ -->
+    <section class="casa" id="casa" aria-labelledby="casa-titulo">
+        <div class="casa__anillo" aria-hidden="true"></div>
+        <div class="casa__logo"><img src="img/logo-ink.png" alt="El Cuache · Café y Restaurante"></div>
+        <div class="casa__texto">
+            <p class="etiqueta">Bienvenidos a la casa</p>
+            <h2 class="casa__titulo" id="casa-titulo">El Cuache</h2>
+            <p class="casa__lema">Café y Restaurante · San Antonio Huista</p>
+            <p class="casa__bajada">Un lugar para el desayuno largo, el café de la tarde y la comida de fiesta. Con sabor de pueblo, mesa compartida y la puerta siempre abierta.</p>
+            <a href="#cocina" class="boton boton--rojo magnetico" data-ir>Conoce nuestra cocina</a>
+        </div>
+    </section>
+
+    <div class="faja"></div>
+
+    <!-- ═══ El pueblo ═══ -->
+    <section class="seccion seccion--masa" id="pueblo">
+        <div class="manifiesto">
+            <div>
+                <p class="etiqueta">El pueblo</p>
+                <p class="manifiesto__texto" data-tinta>
+                    En San Antonio Huista la mañana huele a leña y a café. Aquí la marimba está hasta en el escudo del pueblo, las fiestas se viven en la calle y la comida se cocina sin prisa. El Cuache nace de esa mesa larga donde siempre cabe uno más.
+                </p>
+            </div>
+            <div class="manifiesto__collage">
+                <figure class="collage__foto collage__foto--a" data-speed="0.92">
+                    <img src="img/jacaltecas.jpg" alt="Tres mujeres con traje típico en el camino entre Jacaltenango y San Marcos" loading="lazy">
+                    <figcaption>Camino de Jacaltenango, región Huista</figcaption>
+                </figure>
+                <figure class="collage__foto collage__foto--b" data-speed="1.08">
+                    <img src="img/chirimia.jpg" alt="Chirimías y tambor acompañando una procesión" loading="lazy">
+                    <figcaption>Chirimía y tambor en procesión, Jacaltenango</figcaption>
+                </figure>
+                <figure class="collage__foto collage__foto--c" data-speed="1.18">
+                    <img src="img/atol.jpg" alt="Vaso de atol de elote sobre una faja tejida" loading="lazy">
+                    <figcaption>Atol de elote</figcaption>
+                </figure>
+            </div>
+        </div>
+        <div class="datos">
+            <div class="dato"><b data-contar="362">0</b><span>kilómetros desde la Ciudad de Guatemala</span></div>
+            <div class="dato"><b data-contar="16697" data-miles>0</b><span>habitantes según el censo de 2018</span></div>
+            <div class="dato"><b data-contar="2">0</b><span>fiestas grandes: San Antonio de Padua en junio y la Virgen de Guadalupe en diciembre</span></div>
+        </div>
+    </section>
+
+    <div class="faja"></div>
+
+    <!-- ═══ Cocina ═══ -->
+    <section id="cocina">
+        <div class="seccion cocina-intro oscura">
+            <p class="etiqueta">La cocina</p>
+            <h2 class="titulo-seccion" data-revelar>Recetas de olla grande<br>y fuego lento</h2>
+            <p>Lo que se sirve en las ferias, en las bodas y los domingos de familia. Maíz, recado y paciencia.</p>
+        </div>
+        <div class="platos">
+            <article class="plato" style="background:var(--cochinilla)">
+                <div class="plato__foto"><img src="img/pepian.jpg" alt="Olla de pepián lista para servir" loading="lazy"><span class="plato__credito">Pepián en la olla</span></div>
+                <div class="plato__texto">
+                    <span class="plato__num" aria-hidden="true">01</span>
+                    <h3 class="plato__nombre">Pepián</h3>
+                    <p class="plato__desc">Recado espeso de semillas y chiles tostados, tomate asado y verduras. Platillo de fiesta que se cocina con calma y se sirve con arroz y tortilla.</p>
+                    <span class="plato__nota">◆ El de los domingos</span>
+                </div>
+            </article>
+            <article class="plato" style="background:var(--monte)">
+                <div class="plato__foto"><img src="img/tamal.jpg" alt="Tamal colorado abierto sobre su hoja" loading="lazy"><span class="plato__credito">Tamal colorado</span></div>
+                <div class="plato__texto">
+                    <span class="plato__num" aria-hidden="true">02</span>
+                    <h3 class="plato__nombre">Tamal colorado</h3>
+                    <p class="plato__desc">Masa suave con recado rojo de tomate y achiote, envuelta en hoja y cocida al vapor. El que no falta en Navidad ni en los sábados de tamal.</p>
+                    <span class="plato__nota">◆ Sábados</span>
+                </div>
+            </article>
+            <article class="plato" style="background:var(--anil)">
+                <div class="plato__foto"><img src="img/atol.jpg" alt="Vaso de atol de elote sobre una faja tejida" loading="lazy"><span class="plato__credito">Atol de elote</span></div>
+                <div class="plato__texto">
+                    <span class="plato__num" aria-hidden="true">03</span>
+                    <h3 class="plato__nombre">Todo del elote</h3>
+                    <p class="plato__desc">Cuando el maíz está tierno se vuelve atol, tamalito y rigua. Dulce, caliente y con canela: así se recibe a la visita.</p>
+                    <span class="plato__nota">◆ Temporada de elote</span>
+                </div>
+            </article>
+            <article class="plato" style="background:var(--achiote)">
+                <div class="plato__foto"><img src="img/comal.jpg" alt="Tortillas cociéndose en un comal grande" loading="lazy"><span class="plato__credito">Tortillas en comal</span></div>
+                <div class="plato__texto">
+                    <span class="plato__num" aria-hidden="true">04</span>
+                    <h3 class="plato__nombre">Frijol y tortilla</h3>
+                    <p class="plato__desc">Frijol negro volteado o parado, tortillas recién salidas del comal y un poco de queso fresco. Lo de todos los días, hecho como se debe.</p>
+                    <span class="plato__nota">◆ Siempre</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ═══ Del comal a tu mesa ═══ -->
+    <section class="comal" aria-label="Del comal a tu mesa">
+        <div class="comal__foto"><img src="img/tortillera.jpg" alt="Mujer haciendo tortillas sobre comal calentado con leña" loading="lazy"></div>
+        <div class="comal__velo"></div>
+        <div class="comal__texto">
+            <div>
+                <h2><span class="linea-comal">Del comal</span><br><span class="linea-comal acento">a tu mesa</span></h2>
+                <p class="comal__bajada">Tortillas palmeadas a mano, una por una, sobre comal de barro calentado con leña.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ La carta (en vivo desde el sistema) ═══ -->
+    <section class="seccion seccion--masa rombos-suave" id="carta">
+        <div class="carta__cabecera">
+            <div>
+                <p class="etiqueta">La carta de hoy</p>
+                <h2 class="titulo-seccion" data-revelar>Recomendados<br>del Cuache</h2>
+            </div>
+            <a href="../Frontend/dist/#/carta" class="boton boton--rojo magnetico">Ver la carta completa
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="carta__cuerpo">
+            <div class="carta__fotos" aria-hidden="true">
+                <img class="carta__foto carta__foto--1" src="img/pepian.jpg" alt="" loading="lazy">
+                <img class="carta__foto carta__foto--2" src="img/tamal.jpg" alt="" loading="lazy">
+                <img class="carta__foto carta__foto--3" src="img/atol.jpg" alt="" loading="lazy">
+            </div>
+            <div class="pizarra" id="carta-grid">
+                <!-- Se llena con la carta del sistema (o con la lista de respaldo) -->
+            </div>
+        </div>
+        <div class="carta__nota">
+            <span>En el restaurante, escanea el código QR de tu mesa para pedir, llamar al mesero o pedir la cuenta desde tu celular.</span>
+        </div>
+    </section>
+
+    <div class="faja"></div>
+
+    <!-- ═══ Fiestas y tradiciones (recorrido horizontal) ═══ -->
+    <section class="fiestas oscura" id="fiestas">
+        <div class="fiestas__cabecera">
+            <p class="etiqueta">Fiestas y tradiciones</p>
+            <h2 class="titulo-seccion" data-revelar>Un año entero<br>de celebrar</h2>
+        </div>
+        <div class="fiestas__pista">
+            <div class="fiesta fiesta--texto">
+                <h3>San Antonio de Padua</h3>
+                <p>La feria patronal llena el pueblo de música, procesiones y comida en la calle.</p>
+                <span class="fiesta__fecha" style="position:static;align-self:flex-start;margin-top:1rem">11 al 13 de junio</span>
+            </div>
+            <article class="fiesta fiesta--ancha">
+                <div class="fiesta__foto"><img src="img/conquista.jpg" alt="Niños con trajes y máscaras del Baile de la Conquista" loading="lazy"><span class="fiesta__fecha">Danzas de feria</span></div>
+                <h3>Baile de la Conquista</h3>
+                <p>Máscaras, plumas y trajes bordados: las danzas tradicionales siguen siendo el corazón de las ferias en Guatemala.</p>
+                <small>Niños danzantes del Baile de la Conquista, Guatemala</small>
+            </article>
+            <article class="fiesta">
+                <div class="fiesta__foto"><img src="img/marimba.jpg" alt="Músicos tocando marimba" loading="lazy"><span class="fiesta__fecha">En el escudo</span></div>
+                <h3>Marimba</h3>
+                <p>Está dibujada en el escudo de San Antonio Huista. No hay fiesta, boda ni serenata sin ella.</p>
+                <small>Marimba en Guatemala</small>
+            </article>
+            <article class="fiesta">
+                <div class="fiesta__foto"><img src="img/chirimia.jpg" alt="Chirimías y tambor en una procesión" loading="lazy"><span class="fiesta__fecha">Procesiones</span></div>
+                <h3>Chirimía y tambor</h3>
+                <p>El sonido que anuncia la procesión antes de verla doblar la esquina.</p>
+                <small>Procesión en Jacaltenango, vecino de los Huistas</small>
+            </article>
+            <article class="fiesta fiesta--ancha">
+                <div class="fiesta__foto"><img src="img/mercado.jpg" alt="Día de mercado en Colotenango, Huehuetenango" loading="lazy"><span class="fiesta__fecha">Día de plaza</span></div>
+                <h3>El mercado</h3>
+                <p>De ahí salen nuestro maíz, las hierbas, el chile y el queso. Comprar en plaza también es tradición.</p>
+                <small>Mercado de Colotenango, Huehuetenango</small>
+            </article>
+            <div class="fiesta fiesta--texto" style="background:var(--anil)">
+                <h3>Virgen de Guadalupe</h3>
+                <p>La feria titular cierra el año con rezos, cohetes y mesas llenas.</p>
+                <span class="fiesta__fecha" style="position:static;align-self:flex-start;margin-top:1rem">9 al 12 de diciembre</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Café de altura ═══ -->
+    <section class="altura oscura">
+        <div class="altura__foto"><img src="img/cuchumatanes.jpg" alt="Relieve de la Sierra de los Cuchumatanes en Huehuetenango" loading="lazy"></div>
+        <div class="altura__texto">
+            <p class="etiqueta">Café de altura</p>
+            <h2 class="titulo-seccion" data-revelar>Bajo la sombra de los Cuchumatanes</h2>
+            <p>Huehuetenango es tierra de café, de montaña y de neblina. Por eso nuestra taza va fuerte en la mañana, de olla en la tarde y siempre recién colada.</p>
+            <div class="granos" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+    </section>
+
+    <!-- ═══ Visítanos ═══ -->
+    <section class="seccion visita" id="visitanos">
+        <p class="etiqueta">Visítanos</p>
+        <h2 class="visita__titulo" data-revelar>Te esperamos<br>en Huista</h2>
+        <div class="visita__info">
+            <div class="visita__bloque">
+                <h3>Dónde</h3>
+                <p>San Antonio Huista, Huehuetenango, Guatemala.</p>
+            </div>
+            <div class="visita__bloque">
+                <h3>Horario</h3>
+                <p id="horario">Todos los días<br>7:00 a 23:00</p>
+            </div>
+            <div class="visita__bloque">
+                <h3>Para pedir</h3>
+                <p>Escanea el QR de tu mesa o pídele la carta a tu mesero.</p>
+            </div>
+        </div>
+        <div class="visita__acciones">
+            <a class="boton magnetico" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=San+Antonio+Huista%2C+Huehuetenango%2C+Guatemala">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                Cómo llegar</a>
+            <a class="boton boton--rojo magnetico" id="whatsapp" target="_blank" rel="noopener" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.1L4 20Z"/></svg>
+                Escríbenos</a>
+            <a class="boton magnetico" href="../Frontend/dist/#/carta">Ver la carta</a>
+        </div>
+        <div class="escudo">
+            <img src="img/escudo.jpg" alt="Escudo de San Antonio Huista con una marimba al centro" loading="lazy">
+            <span>En el escudo de San Antonio Huista aparece la marimba: aquí la música y la comida van juntas.</span>
+        </div>
+    </section>
+
+</main>
+
+<footer class="pie">
+    <div class="pie__marca">
+        <img src="img/logo-cream.png" alt="El Cuache · Café y Restaurante" class="pie__logo">
+        <a href="#inicio" class="boton boton--linea" data-ir>Volver arriba ↑</a>
+    </div>
+    <p class="pie__grande" aria-hidden="true"><span>El</span> <span>Cuache</span></p>
+    <details class="creditos">
+        <summary>Créditos de las fotografías (Wikimedia Commons)</summary>
+        <ul id="creditos"></ul>
+    </details>
+    <div class="pie__legal">
+        <span>© <span id="anio"></span> El Cuache · Café y Restaurante · San Antonio Huista, Huehuetenango</span>
+        <a href="../Frontend/dist/#/login">Acceso del equipo</a>
+    </div>
+</footer>
+</div>
+</div>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/ScrollSmoother.min.js"></script>
+<script src="js/vendor/SplitText.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

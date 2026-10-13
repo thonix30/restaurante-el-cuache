@@ -1,0 +1,3 @@
+# Documentos del personal y fotos de asistencia: privados.
+# Se descargan solo a través de la API con sesión de Administrador.
+Require all denied
