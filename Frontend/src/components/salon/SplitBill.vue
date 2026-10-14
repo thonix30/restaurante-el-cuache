@@ -13,7 +13,7 @@
     </div>
 
     <!-- ═══ Por platillo ═══ -->
-    <div v-if="modo === 'platillo'" class="grid lg:grid-cols-[1fr_1.3fr] gap-5">
+    <div v-if="modo === 'platillo'" class="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-5">
       <div>
         <p class="eyebrow mb-2">Platillos sin asignar · toca o arrastra</p>
         <div class="rounded-2xl border border-dashed border-line p-2 min-h-[120px] space-y-1.5" @dragover.prevent @drop="soltar(null)">
@@ -29,7 +29,7 @@
         <p class="text-xs text-ink-3 mt-2">Al tocar un platillo se asigna a <b class="text-gold">Persona {{ personaSel }}</b>.</p>
       </div>
 
-      <div class="grid sm:grid-cols-2 gap-3 content-start">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
         <div v-for="n in personas" :key="n" class="rounded-2xl border p-3 transition cursor-pointer"
              :class="[personaSel === n ? 'border-gold bg-gold/[.06]' : 'border-line bg-surface-2/40', pagadas.has(n) ? 'opacity-60' : '']"
              @click="personaSel = n" @dragover.prevent @drop="soltar(n)">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- ═══ Partes iguales ═══ -->
-    <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       <div v-for="n in personas" :key="n" class="rounded-2xl border border-line bg-surface-2/40 p-4" :class="pagadasIguales.has(n) ? 'opacity-60' : ''">
         <p class="font-bold text-ink">Persona {{ n }}</p>
         <p class="num text-3xl font-semibold text-ink mt-2">{{ money(parteIgual(n)) }}</p>

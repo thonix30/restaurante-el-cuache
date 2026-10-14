@@ -36,7 +36,7 @@
     </div>
 
     <!-- Datos personales -->
-    <div v-if="tab === 'datos'" class="grid lg:grid-cols-2 gap-4">
+    <div v-if="tab === 'datos'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="card p-5"><p class="panel-title mb-4">Datos personales</p>
         <dl class="dl"><Dato l="DPI" :v="e.documento_identidad" mono /><Dato l="Nacimiento" :v="e.fecha_nacimiento ? fecha(e.fecha_nacimiento + ' 12:00', { day: 'numeric', month: 'long', year: 'numeric' }) + ` (${edad} años)` : null" />
           <Dato l="Teléfono" :v="e.telefono" mono /><Dato l="Correo" :v="e.email" /><Dato l="Dirección" :v="e.direccion" /></dl></div>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Contrato y pago -->
-    <div v-if="tab === 'contrato'" class="grid lg:grid-cols-2 gap-4">
+    <div v-if="tab === 'contrato'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="card p-5"><p class="panel-title mb-4">Contrato</p>
         <dl class="dl"><Dato l="Puesto" :v="e.puesto" /><Dato l="Ingreso" :v="e.fecha_ingreso ? fecha(e.fecha_ingreso + ' 12:00', { day: 'numeric', month: 'long', year: 'numeric' }) : null" />
           <Dato l="Tipo de contrato" :v="e.tipo_contrato" /><Dato l="Antigüedad" :v="e.antiguedad" /></dl></div>
@@ -65,7 +65,7 @@
     </div>
 
     <!-- Documentos -->
-    <div v-if="tab === 'docs'" class="grid lg:grid-cols-[1.4fr_1fr] gap-4">
+    <div v-if="tab === 'docs'" class="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
       <div class="card divide-y divide-line/50">
         <div v-for="d in e.documentos" :key="d.id" class="flex items-center gap-3 p-4">
           <span class="grid place-items-center w-11 h-11 rounded-xl bg-surface-2 text-ink-2"><component :is="d.mime?.startsWith('image') ? PhImage : PhFilePdf" :size="22" /></span>
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Acceso al sistema -->
-    <div v-if="tab === 'acceso'" class="grid lg:grid-cols-2 gap-4">
+    <div v-if="tab === 'acceso'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <form class="card p-5 space-y-4" @submit.prevent="guardarAcceso">
         <div class="flex items-center justify-between">
           <div><p class="panel-title">Acceso al sistema</p><p class="text-xs text-ink-3">Usuario y contraseña para la app</p></div>
@@ -129,7 +129,7 @@
     </div>
 
     <!-- Asistencia -->
-    <div v-if="tab === 'asistencia'" class="grid lg:grid-cols-[1fr_300px] gap-4">
+    <div v-if="tab === 'asistencia'" class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4">
       <div class="card p-5">
         <div class="flex items-center justify-between mb-4">
           <button class="btn btn-ghost btn-sm btn-icon" aria-label="Mes anterior" @click="cambiarMes(-1)"><PhCaretLeft :size="18" /></button>
@@ -160,7 +160,7 @@
     </div>
 
     <!-- Propinas y ventas -->
-    <div v-if="tab === 'ventas'" class="grid sm:grid-cols-3 gap-4">
+    <div v-if="tab === 'ventas'" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <KpiCard label="Cuentas atendidas (30 días)" :value="e.ventas_30d.cuentas" :icon="PhReceipt" />
       <KpiCard label="Ventas (30 días)" :value="e.ventas_30d.ventas" format="money" :icon="PhCurrencyCircleDollar" tone="info" />
       <KpiCard label="Propinas repartidas (30 días)" :value="e.ventas_30d.propinas_repartidas" format="money" :icon="PhHandCoins" tone="ok" hint="Según su presencia al cobrarse cada propina" />

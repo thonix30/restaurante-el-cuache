@@ -147,24 +147,27 @@ p { margin: 0 0 1em; }
 .menu-movil .faja { position: absolute; left: 0; right: 0; bottom: 0; }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
-.hero { position: relative; height: 100svh; min-height: 600px; overflow: hidden; background: var(--carbon); }
+.hero { position: relative; min-height: 100svh; overflow: hidden; background: var(--carbon); }
 .hero__foto { position: absolute; inset: -8% 0; }
 .hero__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.15) contrast(1.05) sepia(.18); }
 .hero__velo { position: absolute; inset: 0;
     background:
         linear-gradient(180deg, rgba(23,17,13,.55) 0%, rgba(23,17,13,.15) 35%, rgba(23,17,13,.75) 78%, var(--carbon) 100%),
         linear-gradient(90deg, rgba(23,17,13,.7), transparent 65%); }
-.hero__contenido { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 7.5rem var(--gutter) clamp(4.5rem, 10vh, 7rem); }
+/* Texto y medallión comparten la misma grilla: nunca se enciman y se mueven juntos */
+.hero__contenido { position: relative; z-index: 2; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: center; gap: clamp(1.5rem, 4vw, 4rem); padding: 7rem var(--gutter) clamp(4.5rem, 10vh, 7rem); }
+.hero__texto { min-width: 0; }
 .hero__lugar { display: inline-flex; align-items: center; gap: .7rem; font-size: .8rem; letter-spacing: .32em; text-transform: uppercase; color: var(--maiz); margin-bottom: 1.4rem; font-weight: 700; }
 .hero__lugar::before { content: ""; width: 42px; height: 2px; background: currentColor; }
-.hero__titulo { font-size: min(clamp(3.4rem, 8.6vw, 9rem), 14vh); color: var(--masa); max-width: 58vw; }
+.hero__titulo { font-size: min(clamp(3rem, 7.4vw, 8.5rem), 14vh); color: var(--masa); }
 .hero__titulo .acento { color: var(--maiz); }
 .hero__titulo .linea { display: block; }
 .hero__bajada { max-width: 34rem; margin-top: 1.8rem; font-size: clamp(1.05rem, 1rem + .4vw, 1.35rem); color: rgba(243,228,197,.88); }
 .hero__acciones { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 2rem; }
 
 /* Sello giratorio */
-.sello { position: absolute; z-index: 3; right: calc(var(--gutter) + 1vw); top: 50%; translate: 0 -46%; width: clamp(260px, 34vw, 500px); aspect-ratio: 1; }
+.sello { position: relative; z-index: 3; justify-self: center; width: min(100%, 500px, 64svh); aspect-ratio: 1; }
 .sello svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .sello text { font: 700 10px var(--f-texto); letter-spacing: 3px; text-transform: uppercase; fill: var(--maiz); }
 .sello__centro { position: absolute; inset: 13%; border-radius: 50%; display: grid; place-items: center;
@@ -395,9 +398,8 @@ p { margin: 0 0 1em; }
 .pie__logo { width: clamp(150px, 16vw, 200px) !important; }
 
 @media (max-width: 960px) {
-    .sello { right: 50%; top: 6rem; translate: 50% 0; width: min(52vw, 230px); }
-    .hero__titulo { max-width: none; }
-    .hero__contenido { padding-top: calc(6rem + min(52vw, 230px) + 1rem); }
+    .hero__contenido { grid-template-columns: 1fr; align-content: center; gap: 1.4rem; padding-top: 6.5rem; padding-bottom: 4.5rem; }
+    .sello { order: -1; width: min(52vw, 260px, 30svh); }
     .casa { grid-template-columns: 1fr; text-align: center; }
     .casa__logo { width: min(74vw, 400px); }
     .casa__anillo { left: 50%; top: calc(clamp(5rem, 11vw, 9rem) + min(37vw, 200px)); width: min(94vw, 500px); }
@@ -431,4 +433,11 @@ p { margin: 0 0 1em; }
 
 @media (max-width: 600px) {
     .plato__num { display: none; }
+}
+
+/* Celulares muy bajos: medallión más chico para que todo quepa sin encimarse */
+@media (max-width: 600px) and (max-height: 700px) {
+    .sello { width: min(40vw, 170px, 26svh); }
+    .hero__contenido { padding-top: 5.8rem; gap: 1rem; }
+    .hero__titulo { font-size: clamp(2.4rem, 11vw, 3.2rem); }
 }

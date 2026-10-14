@@ -19,7 +19,7 @@
       <KpiCard label="Propinas" :value="d.kpis?.propinas || 0" format="money" :icon="PhHandCoins" :delta="d.cambio?.propinas" tone="ok" :hint="`Descuentos ${money(d.kpis?.descuentos || 0)}`" />
     </div>
 
-    <div class="grid xl:grid-cols-[1.7fr_1fr] gap-4 mb-4">
+    <div class="grid grid-cols-1 xl:grid-cols-[1.7fr_1fr] gap-4 mb-4">
       <!-- Ingresos -->
       <div class="card p-5" data-reveal>
         <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-4 mb-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
       <div class="card p-5" data-reveal>
         <p class="panel-title mb-4">Top platillos</p>
         <BarList v-if="d.top_platillos?.length" :rows="d.top_platillos.map(p => ({ label: p.nombre, value: p.unidades, extra: money(p.ventas) }))" :fmt="(v) => v + ' u.'" />
@@ -92,7 +92,7 @@
         <p class="panel-title">Alertas</p>
         <span class="chip chip-neutral num">{{ alertas.length }}</span>
       </div>
-      <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
         <router-link v-for="(a, i) in alertas.slice(0, 9)" :key="i" :to="a.ruta" class="flex items-start gap-3 rounded-xl p-3 border border-line/60 hover:border-gold/50 transition">
           <span class="grid place-items-center w-9 h-9 rounded-xl shrink-0" :class="nivelCls(a.nivel)"><component :is="iconoAlerta(a.tipo)" :size="18" weight="duotone" /></span>
           <div class="min-w-0"><p class="text-sm font-bold">{{ a.titulo }}</p><p class="text-xs text-ink-3 line-clamp-2">{{ a.mensaje }}</p></div>

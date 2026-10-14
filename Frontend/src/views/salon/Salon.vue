@@ -54,7 +54,7 @@
     </div>
 
     <!-- ═══ Lista ═══ -->
-    <div v-else class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
       <button v-for="m in mesasFiltradas" :key="m.id" class="card card-hover p-4 text-left flex items-center gap-4" data-reveal
               :class="[alertaMesa(m) ? 'border-gold/60' : '', sel?.id === m.id ? 'ring-2 ring-gold/50' : '']" @click="seleccionar(m)">
         <span class="grid place-items-center w-16 h-16 rounded-2xl border-2 shrink-0 font-serif text-3xl" :class="[estilo(m.estado).cls, estilo(m.estado).num, alertaMesa(m) ? 'pulse-gold' : '']">{{ m.numero }}</span>

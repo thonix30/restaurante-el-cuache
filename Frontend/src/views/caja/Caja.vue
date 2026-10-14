@@ -4,7 +4,7 @@
       <button class="btn btn-soft" @click="verHistorial"><PhClockCounterClockwise :size="18" /> Turnos anteriores</button>
     </PageHeader>
 
-    <div v-if="cargando" class="grid md:grid-cols-2 gap-4"><div class="skeleton h-64" /><div class="skeleton h-64" /></div>
+    <div v-if="cargando" class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="skeleton h-64" /><div class="skeleton h-64" /></div>
 
     <!-- ═══ Caja cerrada: abrir ═══ -->
     <div v-else-if="!estado.abierto" class="max-w-xl mx-auto card p-8 text-center" data-reveal>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- ═══ Turno abierto ═══ -->
-    <div v-else class="grid xl:grid-cols-[1.5fr_1fr] gap-4">
+    <div v-else class="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-4">
       <div class="space-y-4">
         <div class="card p-5" data-reveal>
           <div class="flex flex-wrap items-center gap-3">
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div v-for="m in t.metodos" :key="m.metodo" class="card p-5" data-reveal>
             <div class="flex items-center justify-between">
               <p class="eyebrow">{{ m.metodo }}</p>
@@ -46,7 +46,7 @@
 
         <div class="card p-5" data-reveal>
           <p class="panel-title mb-4">Desglose del turno</p>
-          <dl class="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
             <div class="flex justify-between"><dt class="text-ink-3">Cuentas cobradas</dt><dd class="num">{{ t.cuentas_cobradas }}</dd></div>
             <div class="flex justify-between"><dt class="text-ink-3">Ventas netas</dt><dd class="num">{{ money(t.ventas) }}</dd></div>
             <div class="flex justify-between"><dt class="text-ink-3">Total cobrado</dt><dd class="num">{{ money(t.cobrado) }}</dd></div>

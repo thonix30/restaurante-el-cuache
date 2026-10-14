@@ -5,7 +5,7 @@
       <Botanical class="absolute -right-16 -bottom-10 w-80 text-gold/15 rotate-12" />
     </div>
 
-    <div class="relative z-10 min-h-[100dvh] grid lg:grid-cols-[1.05fr_1fr]">
+    <div class="relative z-10 min-h-[100dvh] grid grid-cols-1 lg:grid-cols-[1.05fr_1fr]">
       <!-- ═══ Reloj ═══ -->
       <section class="flex flex-col justify-between p-6 sm:p-10 lg:p-14 lg:border-r border-line/50">
         <div class="flex items-center justify-between">

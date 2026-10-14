@@ -12,7 +12,7 @@
       <KpiCard label="Faltas esta semana" :value="kpis.faltas_semana || 0" :icon="PhCalendarX" tone="danger" />
     </div>
 
-    <div class="grid xl:grid-cols-[1fr_320px] gap-4">
+    <div class="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-4">
       <div>
         <div class="flex flex-wrap items-center gap-2 mb-4" data-reveal>
           <div class="relative flex-1 min-w-[200px]"><PhMagnifyingGlass :size="17" class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
@@ -22,7 +22,7 @@
           <div class="seg"><button :class="{ on: vista === 'tarjetas' }" aria-label="Tarjetas" @click="vista = 'tarjetas'"><PhSquaresFour :size="16" /></button><button :class="{ on: vista === 'tabla' }" aria-label="Tabla" @click="vista = 'tabla'"><PhRows :size="16" /></button></div>
         </div>
 
-        <div v-if="vista === 'tarjetas'" class="grid sm:grid-cols-2 2xl:grid-cols-3 gap-3">
+        <div v-if="vista === 'tarjetas'" class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3">
           <router-link v-for="e in filtrados" :key="e.id" :to="`/personal/${e.id}`" class="card card-hover p-4 flex items-center gap-4">
             <Avatar :src="e.foto" :name="e.nombre_completo" :puesto="e.puesto" :size="56" :dot="e.en_turno ? (e.en_descanso ? 'sage' : 'ok') : null" />
             <div class="flex-1 min-w-0">

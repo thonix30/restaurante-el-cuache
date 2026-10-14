@@ -17,7 +17,7 @@
 
     <fieldset>
       <legend class="eyebrow mb-3">Datos personales</legend>
-      <div class="grid sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div><label class="label">Documento de identidad (DPI)</label><input v-model="f.documento_identidad" class="input num" /></div>
         <div><label class="label">Fecha de nacimiento</label><input v-model="f.fecha_nacimiento" type="date" class="input" :class="err.fecha_nacimiento ? 'input-error' : ''" /></div>
         <div><label class="label">Teléfono</label><input v-model="f.telefono" type="tel" class="input num" /></div>
@@ -28,7 +28,7 @@
 
     <fieldset>
       <legend class="eyebrow mb-3">Contacto de emergencia</legend>
-      <div class="grid sm:grid-cols-3 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div><label class="label">Nombre</label><input v-model="f.emergencia_nombre" class="input" /></div>
         <div><label class="label">Parentesco</label><input v-model="f.emergencia_parentesco" class="input" list="parentescos" />
           <datalist id="parentescos"><option v-for="p in ['Madre', 'Padre', 'Esposo(a)', 'Hermano(a)', 'Hijo(a)', 'Otro']" :key="p" :value="p" /></datalist></div>
@@ -38,7 +38,7 @@
 
     <fieldset>
       <legend class="eyebrow mb-3">Contrato y pago</legend>
-      <div class="grid sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div><label class="label">Puesto</label>
           <select v-model="f.puesto" class="input"><option v-for="p in puestos" :key="p">{{ p }}</option></select></div>
         <div><label class="label">Fecha de ingreso</label><input v-model="f.fecha_ingreso" type="date" class="input" /></div>

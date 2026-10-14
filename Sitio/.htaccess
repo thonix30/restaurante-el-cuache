@@ -1,0 +1,7 @@
+# El HTML nunca se guarda en caché (así siempre pide la versión nueva de CSS/JS);
+# los archivos versionados (?v=) y las imágenes sí.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

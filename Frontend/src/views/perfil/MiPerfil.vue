@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-[1.2fr_1fr] gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4">
       <div class="space-y-4">
         <!-- Próximo turno -->
         <div class="card p-6 relative overflow-hidden" data-reveal>

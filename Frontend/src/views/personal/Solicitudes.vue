@@ -2,7 +2,7 @@
   <div>
     <PageHeader eyebrow="Equipo" title="Solicitudes y horas" subtitle="Aprueba vacaciones, permisos y cambios de turno; revisa horas, puntualidad, propinas y pago estimado del periodo." />
 
-    <div class="grid 2xl:grid-cols-[420px_1fr] gap-4">
+    <div class="grid grid-cols-1 2xl:grid-cols-[420px_1fr] gap-4">
       <!-- ═══ Bandeja ═══ -->
       <section class="card p-5 h-fit no-print" data-reveal>
         <div class="flex items-center justify-between mb-4">

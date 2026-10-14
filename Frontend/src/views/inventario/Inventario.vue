@@ -11,7 +11,7 @@
       <KpiCard label="Valor del inventario" :value="inv.resumen?.valor || 0" format="money" :icon="PhCoins" tone="ok" />
     </div>
 
-    <div class="grid xl:grid-cols-[1.4fr_1fr] gap-4">
+    <div class="grid grid-cols-1 xl:grid-cols-[1.4fr_1fr] gap-4">
       <div class="card overflow-hidden" data-reveal>
         <div class="flex items-center justify-between px-5 py-4 border-b border-line/60">
           <p class="panel-title">Stock</p>

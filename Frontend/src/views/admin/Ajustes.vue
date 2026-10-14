@@ -5,7 +5,7 @@
     <form class="space-y-4" @submit.prevent="guardar">
       <div class="card p-5 space-y-4" data-reveal>
         <p class="panel-title">Restaurante</p>
-        <div class="grid sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><label class="label">Nombre</label><input v-model="c.restaurante_nombre" class="input" /></div>
           <div><label class="label">Lema</label><input v-model="c.restaurante_lema" class="input" /></div>
           <div><label class="label">Propina sugerida (%)</label><input v-model="c.propina_sugerida" type="number" min="0" max="30" class="input num" /></div>
@@ -15,7 +15,7 @@
 
       <div class="card p-5 space-y-4" data-reveal>
         <p class="panel-title">Turnos y asistencia</p>
-        <div class="grid sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><label class="label">Horario de apertura</label><input v-model="c.horario_apertura" type="time" class="input num" /></div>
           <div><label class="label">Horario de cierre</label><input v-model="c.horario_cierre" type="time" class="input num" /></div>
           <div><label class="label">Máximo de horas por semana</label><input v-model="c.horas_max_semana" type="number" min="1" class="input num" /></div>

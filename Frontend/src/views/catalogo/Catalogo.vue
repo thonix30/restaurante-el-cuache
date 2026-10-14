@@ -27,7 +27,7 @@
 
     <!-- ═══ Platillos ═══ -->
     <template v-if="tab === 'productos'">
-      <div v-if="vista === 'grilla'" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div v-if="vista === 'grilla'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <article v-for="p in filtrados" :key="p.id" class="card card-hover overflow-hidden cursor-pointer group" @click="editar(p)">
           <div class="relative aspect-[16/10] overflow-hidden">
             <img :src="p.imagen || './img/almuerzo.jpg'" alt="" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" :class="!p.disponible ? 'grayscale-soft' : ''" :style="{ objectPosition: p.imagen_posicion }" />

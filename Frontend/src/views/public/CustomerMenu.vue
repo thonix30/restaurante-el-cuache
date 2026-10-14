@@ -28,9 +28,9 @@
           <img :src="'./img/desayuno.jpg'" alt="" class="w-full h-full object-cover scale-110" />
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/30 to-[rgb(var(--bg))]" />
-        <div class="relative z-10 h-full max-w-5xl mx-auto px-5 flex flex-col">
+        <div class="relative z-10 h-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col">
           <div class="flex items-center justify-between pt-4">
-            <BrandLogo :size="64" tone="cream" class="drop-shadow-lg" />
+            <BrandLogo :size="64" tone="cream" class="drop-shadow-lg w-14 h-14 sm:w-16 sm:h-16" />
             <div class="flex items-center gap-2">
               <button class="btn btn-icon bg-black/30 text-[#F5ECDC] border border-white/15 backdrop-blur" :aria-label="ui.theme === 'dark' ? 'Modo claro' : 'Modo oscuro'" @click="ui.toggleTheme">
                 <component :is="ui.theme === 'dark' ? PhSun : PhMoonStars" :size="18" />
@@ -44,13 +44,13 @@
           </div>
           <div class="mt-auto pb-8">
             <p class="eyebrow text-[#EECB8E]">{{ restaurante.lema || 'Café y Restaurante' }}</p>
-            <h1 class="font-serif text-5xl sm:text-6xl text-[#F5ECDC] leading-none mt-1">{{ restaurante.nombre || 'El Cuache' }}</h1>
+            <h1 class="font-serif text-4xl min-[400px]:text-5xl sm:text-6xl text-[#F5ECDC] leading-none mt-1">{{ restaurante.nombre || 'El Cuache' }}</h1>
           </div>
         </div>
       </section>
 
       <!-- Aún no abrimos -->
-      <div v-if="!abierto && !cargando" class="max-w-5xl mx-auto px-5 -mt-3 relative z-10">
+      <div v-if="!abierto && !cargando" class="max-w-6xl mx-auto px-4 sm:px-6 -mt-3 relative z-10">
         <div class="card border-warn/40 p-4 flex items-center gap-4">
           <span class="grid place-items-center w-12 h-12 rounded-2xl bg-warn/15 text-warn shrink-0"><PhMoonStars :size="24" weight="duotone" /></span>
           <div>
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!token" class="max-w-5xl mx-auto px-5 -mt-3 relative z-10">
+      <div v-else-if="!token" class="max-w-6xl mx-auto px-4 sm:px-6 -mt-3 relative z-10">
         <div class="card p-4 flex items-center gap-4">
           <span class="grid place-items-center w-12 h-12 rounded-2xl bg-gold/15 text-gold shrink-0"><PhQrCode :size="24" weight="duotone" /></span>
           <p class="text-sm text-ink-2">Para pedir, escanea el código QR de tu mesa.</p>
@@ -68,7 +68,7 @@
 
       <!-- ═══ Categorías (sticky) ═══ -->
       <nav class="sticky top-0 z-30 glass border-b border-line/50 mt-4">
-        <div ref="chipsEl" class="max-w-5xl mx-auto flex gap-2 overflow-x-auto scrollbar-none px-5 py-3">
+        <div ref="chipsEl" class="max-w-6xl mx-auto flex gap-2 overflow-x-auto scrollbar-none px-4 sm:px-6 py-3">
           <button v-for="c in categoriasConProductos" :key="c.id" :data-cat="c.id"
                   class="shrink-0 h-10 px-4 rounded-full text-sm font-bold border transition flex items-center gap-2"
                   :class="catActiva === c.id ? 'bg-gold text-on-gold border-gold shadow-glow' : 'bg-surface border-line text-ink-2 hover:text-ink'"
@@ -79,8 +79,8 @@
       </nav>
 
       <!-- ═══ Carta ═══ -->
-      <main class="max-w-5xl mx-auto px-5 pt-6" :class="token ? 'pb-48' : 'pb-16'">
-        <div v-if="cargando" class="grid sm:grid-cols-2 gap-4">
+      <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6" :class="token ? 'pb-48' : 'pb-16'">
+        <div v-if="cargando" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="i in 4" :key="i" class="skeleton h-72" />
         </div>
         <section v-for="c in categoriasConProductos" :key="c.id" :id="'cat-' + c.id" :data-section="c.id" class="mb-10 scroll-mt-20">
@@ -88,7 +88,7 @@
             <h2 class="font-serif text-2xl sm:text-3xl">{{ c.nombre }}</h2>
             <span class="flex-1 h-px bg-gradient-to-r from-line to-transparent" />
           </div>
-          <div class="grid sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <article v-for="p in porCategoria(c.id)" :key="p.id" data-card
                      class="card overflow-hidden group flex flex-col transition duration-500"
                      :class="agotado(p) ? 'opacity-90' : 'card-hover cursor-pointer'"
@@ -108,7 +108,7 @@
               </div>
               <div class="p-4 flex flex-col flex-1">
                 <div class="flex items-start justify-between gap-3">
-                  <h3 class="font-serif text-xl leading-tight" :class="agotado(p) ? 'text-ink-3' : ''">{{ p.nombre }}</h3>
+                  <h3 class="font-serif text-lg sm:text-xl leading-tight min-w-0 break-words" :class="agotado(p) ? 'text-ink-3' : ''">{{ p.nombre }}</h3>
                   <span class="num text-lg font-semibold shrink-0" :class="agotado(p) ? 'text-ink-3 line-through' : 'text-gold'">{{ money(p.precio) }}</span>
                 </div>
                 <p class="text-sm text-ink-3 mt-1.5 line-clamp-2 flex-1">{{ p.descripcion }}</p>
@@ -125,7 +125,7 @@
 
       <!-- ═══ Carrito flotante ═══ -->
       <Transition name="fade">
-        <button v-if="token && (cart.count || cuenta)" ref="cartBtn" class="fixed z-40 right-4 bottom-[112px] sm:right-8 h-14 pl-4 pr-5 rounded-full btn-gold btn shadow-lift"
+        <button v-if="token && (cart.count || cuenta)" ref="cartBtn" class="fixed z-40 right-3 sm:right-8 bottom-[92px] sm:bottom-[112px] h-12 sm:h-14 pl-4 pr-5 rounded-full btn-gold btn shadow-lift"
                 @click="orden = true" aria-label="Ver tu orden">
           <PhShoppingBagOpen :size="22" weight="fill" />
           <span class="font-extrabold">{{ cart.count ? 'Tu orden' : 'Lo que pediste' }}</span>
@@ -135,14 +135,14 @@
 
       <!-- ═══ Barra fija: Llamar al mesero / Pedir la cuenta ═══ -->
       <div v-if="token" class="fixed bottom-0 inset-x-0 z-40 glass border-t border-line/60 safe-bottom">
-        <div class="max-w-5xl mx-auto grid grid-cols-2 gap-3 p-3">
-          <button class="btn btn-lg h-16 rounded-2xl text-[15px] leading-tight whitespace-normal text-left border"
+        <div class="max-w-6xl mx-auto grid grid-cols-2 gap-2 sm:gap-3 p-2.5 sm:p-3">
+          <button class="btn btn-lg h-14 sm:h-16 px-3 sm:px-5 rounded-2xl text-sm sm:text-[15px] leading-tight whitespace-normal text-left border"
                   :class="llamados.mesero ? 'bg-gold/15 border-gold text-gold pulse-gold' : 'btn-soft'"
                   :disabled="!abierto" @click="llamados.mesero ? hoja = 'mesero' : confirmarLlamado('mesero')">
             <PhBellRinging :size="24" :weight="llamados.mesero ? 'fill' : 'duotone'" />
             {{ llamados.mesero ? 'Mesero avisado' : 'Llamar al mesero' }}
           </button>
-          <button class="btn btn-lg h-16 rounded-2xl text-[15px] leading-tight whitespace-normal text-left border"
+          <button class="btn btn-lg h-14 sm:h-16 px-3 sm:px-5 rounded-2xl text-sm sm:text-[15px] leading-tight whitespace-normal text-left border"
                   :class="llamados.cuenta ? 'bg-gold/15 border-gold text-gold pulse-gold' : 'btn-soft'"
                   :disabled="!abierto" @click="llamados.cuenta ? hoja = 'cuenta' : hoja = 'pagar'">
             <PhReceipt :size="24" :weight="llamados.cuenta ? 'fill' : 'duotone'" />
@@ -158,16 +158,25 @@
         <div class="-mx-5 sm:-mx-6 -mt-1 mb-4 aspect-[16/9] overflow-hidden">
           <img :src="detalle.imagen || './img/almuerzo.jpg'" :alt="detalle.nombre" class="w-full h-full object-cover" :style="{ objectPosition: detalle.imagen_posicion }" />
         </div>
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="num text-2xl font-semibold text-gold">{{ money(detalle.precio) }}</span>
+          <span v-if="detalle.destacado" class="chip chip-gold"><PhStar :size="12" weight="fill" /> Recomendado</span>
+        </div>
         <p class="text-ink-2 leading-relaxed">{{ detalle.descripcion }}</p>
+        <template v-if="token">
         <label class="label mt-5" for="notas">Notas para la cocina <span class="text-ink-3 font-normal">(opcional)</span></label>
         <textarea id="notas" v-model="detalleNotas" rows="2" maxlength="200" class="input" placeholder="Ej. sin cebolla, término medio, salsa aparte…" />
         <div class="flex flex-wrap gap-1.5 mt-2">
           <button v-for="s in sugerencias" :key="s" class="chip chip-neutral hover:border-gold/50" @click="detalleNotas = (detalleNotas ? detalleNotas + ', ' : '') + s">{{ s }}</button>
         </div>
+        </template>
+        <p v-else class="mt-5 rounded-2xl bg-gold/10 border border-gold/30 p-3.5 text-sm text-ink-2 flex gap-2.5">
+          <PhQrCode :size="20" class="text-gold shrink-0" /> Para pedir este platillo, escanea el código QR de tu mesa.
+        </p>
       </template>
-      <template #footer>
+      <template v-if="token" #footer>
         <QtyStepper big :value="detalleCant" @inc="detalleCant++" @dec="detalleCant = Math.max(1, detalleCant - 1)" />
-        <button class="btn btn-gold btn-lg flex-1" :disabled="!abierto || !token" @click="agregarDetalle">
+        <button class="btn btn-gold btn-lg flex-1 min-w-0" :disabled="!abierto" @click="agregarDetalle">
           Agregar · <span class="num">{{ money((detalle?.precio || 0) * detalleCant) }}</span>
         </button>
       </template>
@@ -438,14 +447,24 @@ const enviar = async () => {
     refrescar()
   } catch (e) {
     if (e.payload?.code === 'NO_DISPONIBLE') {
-      // Se agotó algo justo al enviar: se marca en el carrito y se bloquea el envío
-      const ids = e.payload.no_disponibles.map(x => x.producto_id)
-      aplicarAgotados([...new Set([...agotadosSet.value, ...ids])])
-      e.payload.no_disponibles.forEach(x => {
-        if (x.motivo === 'stock' && x.disponibles > 0) ui.toast(`Solo quedan ${x.disponibles} de ${x.nombre}`, 'warn')
+      const problemas = e.payload.no_disponibles
+      // Agotados de verdad (o sin ninguna unidad): se marcan y bloquean el envío
+      const agotadosIds = problemas.filter(x => x.motivo === 'agotado' || x.disponibles <= 0).map(x => x.producto_id)
+      if (agotadosIds.length) aplicarAgotados([...new Set([...agotadosSet.value, ...agotadosIds])])
+      // Quedan menos de las pedidas: se ajusta la cantidad a lo disponible
+      problemas.filter(x => x.motivo === 'stock' && x.disponibles > 0).forEach(x => {
+        let quedan = x.disponibles
+        cart.items.filter(i => i.producto_id === x.producto_id).forEach(i => {
+          const toma = Math.min(i.cantidad, quedan)
+          quedan -= toma
+          if (toma === 0) cart.remove(i); else i.cantidad = toma
+        })
+        ui.toast(`Solo quedan ${x.disponibles} de ${x.nombre}. Ajustamos tu orden; revísala y vuelve a enviar.`, 'warn', { duracion: 6000 })
       })
+      if (agotadosIds.length) ui.error(e)
+    } else {
+      ui.error(e)
     }
-    ui.error(e)
   } finally {
     enviando.value = false
   }
@@ -493,6 +512,14 @@ onMounted(async () => {
     }, root.value)
   }, reduced() ? 0 : 500)
   if (token) poll = setInterval(() => { if (!document.hidden) refrescar() }, 5000)
+  else poll = setInterval(async () => {
+    if (document.hidden) return
+    try {
+      const m = await publicService.menu()
+      abierto.value = m.abierto
+      agotadosSet.value = new Set(m.productos.filter(p => !p.disponible).map(p => p.id))
+    } catch { /* se reintenta en el siguiente ciclo */ }
+  }, 20000)
 })
 onUnmounted(() => { clearInterval(poll); ctx?.revert(); observer?.disconnect() })
 </script>

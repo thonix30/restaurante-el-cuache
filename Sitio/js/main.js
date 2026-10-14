@@ -228,22 +228,29 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<'
 
 async function cargarCarta() {
     let platillos = RESPALDO
+    let ordenCategorias = []
     let enVivo = false
     try {
         const r = await fetch(CONFIG.api, { headers: { Accept: 'application/json' } })
         const j = await r.json()
         const disponibles = (j.data?.productos || []).filter(p => p.disponible)
-        if (disponibles.length) { platillos = disponibles; enVivo = true }
+        if (disponibles.length) {
+            platillos = disponibles
+            ordenCategorias = (j.data?.categorias || []).map(c => c.nombre)
+            enVivo = true
+        }
     } catch { /* sin API: se usa la lista de respaldo */ }
 
-    // Agrupa por categoría: recomendados primero, máx. 4 categorías y 4 platillos por categoría
-    const grupos = new Map()
+    // Todas las categorías, en el orden configurado en el sistema; dentro de cada
+    // una, primero los recomendados. Máx. 4 platillos por categoría (la carta
+    // completa está en el botón "Ver la carta completa").
+    const grupos = new Map(ordenCategorias.map(n => [n, []]))
     for (const p of [...platillos].sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0))) {
         const c = p.categoria || 'De la casa'
         if (!grupos.has(c)) grupos.set(c, [])
         if (grupos.get(c).length < 4) grupos.get(c).push(p)
     }
-    const html = [...grupos.entries()].slice(0, 4).map(([cat, items]) => `
+    const html = [...grupos.entries()].filter(([, items]) => items.length).map(([cat, items]) => `
         <div class="pizarra__grupo">
             <h3 class="pizarra__cat">${esc(cat)}</h3>
             ${items.map(p => `
@@ -259,13 +266,21 @@ async function cargarCarta() {
     if (!reducido) {
         gsap.from('.pizarra', { rotate: -3, y: 60, autoAlpha: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.pizarra', start: 'top 85%' } })
         gsap.from('.pizarra__item', { x: 30, autoAlpha: 0, stagger: .05, duration: .6, ease: 'power3.out', scrollTrigger: { trigger: '.pizarra', start: 'top 70%' } })
-        gsap.from('.carta__foto', { y: 100, rotate: (i) => [-14, 12, -8][i], autoAlpha: 0, stagger: .15, duration: 1.1, ease: 'back.out(1.4)', scrollTrigger: { trigger: '.carta__fotos', start: 'top 80%' } })
-        gsap.to('.carta__foto--2', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.carta__fotos', scrub: true } })
-        gsap.to('.carta__foto--3', { yPercent: -32, ease: 'none', scrollTrigger: { trigger: '.carta__fotos', scrub: true } })
-        // En escritorio el collage acompaña a la pizarra mientras se lee
+        gsap.from('.carta__foto', { scale: .6, autoAlpha: 0, stagger: .15, duration: 1, ease: 'back.out(1.6)', scrollTrigger: { trigger: '.carta__fotos', start: 'top 85%' } })
         if (window.innerWidth > 960) {
+            // Escritorio: el collage acompaña a la pizarra (anclado) y, mientras se
+            // lee, las fotos se mueven, giran y cambian de profundidad con el scroll.
             const fotos = $('.carta__fotos'), pizarra = $('.pizarra')
-            ScrollTrigger.create({ trigger: '.carta__cuerpo', start: 'top 110px', end: () => '+=' + Math.max(0, pizarra.offsetHeight - fotos.offsetHeight), pin: fotos, pinSpacing: false, invalidateOnRefresh: true })
+            const recorrido = () => Math.max(400, pizarra.offsetHeight - fotos.offsetHeight)
+            ScrollTrigger.create({ trigger: '.carta__cuerpo', start: 'top 110px', end: () => '+=' + recorrido(), pin: fotos, pinSpacing: false, invalidateOnRefresh: true })
+            gsap.timeline({ scrollTrigger: { trigger: '.carta__cuerpo', start: 'top 80%', end: () => '+=' + (recorrido() + window.innerHeight * .3), scrub: 1, invalidateOnRefresh: true } })
+                .fromTo('.carta__foto--1', { yPercent: 6, rotation: -6 }, { yPercent: -10, rotation: 3, scale: .94, ease: 'none' }, 0)
+                .fromTo('.carta__foto--2', { yPercent: 30, rotation: 10 }, { yPercent: -45, rotation: -4, scale: 1.08, ease: 'none' }, 0)
+                .fromTo('.carta__foto--3', { yPercent: 55, rotation: -10 }, { yPercent: -70, rotation: 5, scale: 1.12, ease: 'none' }, 0)
+        } else {
+            // Celular: parallax simple entre las fotos
+            gsap.to('.carta__foto--2', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.carta__fotos', scrub: true } })
+            gsap.to('.carta__foto--3', { yPercent: -32, ease: 'none', scrollTrigger: { trigger: '.carta__fotos', scrub: true } })
         }
     }
     activarCursor()

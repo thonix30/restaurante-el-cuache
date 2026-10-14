@@ -44,7 +44,7 @@
 
     <!-- ═══ Experiencia ═══ -->
     <section id="experiencia" class="relative max-w-6xl mx-auto px-5 py-24 sm:py-32">
-      <div class="grid md:grid-cols-[1.1fr_1fr] gap-12 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div data-scroll>
           <p class="eyebrow text-gold mb-3">La experiencia</p>
           <h2 class="font-serif text-4xl sm:text-5xl leading-[1.05]">Tu mesa, tu ritmo.<br /><em class="gold-text not-italic">Nosotros, atentos.</em></h2>
@@ -88,7 +88,7 @@
         </div>
         <router-link to="/carta" class="btn btn-soft hidden sm:inline-flex">Carta completa <PhArrowRight :size="16" /></router-link>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <article v-for="p in destacados" :key="p.id" data-scroll class="card card-hover overflow-hidden group">
           <div class="aspect-[4/5] overflow-hidden">
             <img :src="p.imagen || './img/almuerzo.jpg'" :alt="p.nombre" :style="{ objectPosition: p.imagen_posicion }" loading="lazy"

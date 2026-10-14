@@ -13,7 +13,7 @@
       <button class="btn btn-soft" @click="guardarBase"><PhFloppyDisk :size="17" /> Guardar</button>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <div v-for="m in mesas" :key="m.id" class="card p-5 text-center" data-reveal>
         <p class="eyebrow">{{ m.zona }}</p>
         <p class="font-serif text-3xl mt-1">Mesa {{ m.numero }}</p>
