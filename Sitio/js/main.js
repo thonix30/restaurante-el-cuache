@@ -115,8 +115,19 @@ if (!reducido) {
     gsap.to('.hero__foto', { yPercent: 22, scale: 1.12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
     gsap.to('.hero__contenido', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
     // Sello: gira solo y acelera con el scroll
-    const giro = gsap.to('.sello svg', { rotate: 360, duration: 18, repeat: -1, ease: 'none' })
-    ScrollTrigger.create({ trigger: '.hero', start: 'top top', end: 'bottom top', onUpdate: (s) => giro.timeScale(1 + Math.abs(s.getVelocity()) / 300) })
+    // Sello: giro lento propio (una vuelta cada 45 s). El scroll le da un impulso
+    // suave y limitado (máx. ~2.2×), hacia adelante al bajar y hacia atrás al subir;
+    // al dejar de mover, vuelve con calma a su ritmo.
+    const giro = gsap.to('.sello svg', { rotate: 360, duration: 45, repeat: -1, ease: 'none' })
+    const reposo = gsap.delayedCall(0.25, () => gsap.to(giro, { timeScale: 1, duration: 2.4, ease: 'sine.out', overwrite: true })).pause()
+    ScrollTrigger.create({
+        trigger: '.hero', start: 'top top', end: 'bottom top',
+        onUpdate: (s) => {
+            const impulso = 1 + Math.min(Math.abs(s.getVelocity()) / 2500, 1.2)
+            gsap.to(giro, { timeScale: impulso * s.direction, duration: 1.2, ease: 'power2.out', overwrite: true })
+            reposo.restart(true)
+        },
+    })
     gsap.to('.sello__centro', { scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
 
     // La casa: el logo grande entra girando y el anillo tejido rota con el scroll
