@@ -70,6 +70,7 @@
           <router-link to="/kiosco" class="btn btn-soft btn-sm"><PhFingerprint :size="16" /> Marcar asistencia</router-link>
           <router-link to="/carta" class="btn btn-soft btn-sm"><PhBookOpenText :size="16" /> Ver la carta</router-link>
         </div>
+        <InstalarApp :clase="'btn btn-ghost btn-sm w-full mt-2 text-gold'" />
       </form>
 
       <p class="text-center text-[11px] text-ink-3 mt-6">© {{ new Date().getFullYear() }} El Cuache · Café y Restaurante</p>
@@ -83,6 +84,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { PhUser, PhLockKey, PhEye, PhEyeSlash, PhArrowRight, PhWarningCircle, PhClock, PhFingerprint, PhBookOpenText } from '@phosphor-icons/vue'
 import BrandLogo from '@/components/ui/BrandLogo.vue'
 import Botanical from '@/components/ui/Botanical.vue'
+import InstalarApp from '@/components/pwa/InstalarApp.vue'
 import { useAuthStore } from '@/stores/auth'
 import { gsap, reduced, magnetic } from '@/composables/useMotion'
 

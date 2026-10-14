@@ -40,6 +40,7 @@
           </div>
           <button v-if="!collapsed" class="btn btn-ghost btn-sm btn-icon" title="Cerrar sesión" @click="salir"><PhSignOut :size="18" /></button>
         </div>
+        <InstalarApp :clase="'btn btn-ghost btn-sm w-full mt-1 text-gold'" :solo-icono="collapsed" />
         <button class="btn btn-ghost btn-sm w-full mt-1 text-ink-3" @click="collapsed = !collapsed" :aria-label="collapsed ? 'Expandir menú' : 'Contraer menú'">
           <component :is="collapsed ? PhCaretDoubleRight : PhCaretDoubleLeft" :size="16" />
           <span v-if="!collapsed">Contraer</span>
@@ -119,6 +120,7 @@
         <button class="btn btn-soft" @click="toggleSound"><component :is="soundEnabled ? PhSpeakerHigh : PhSpeakerSlash" :size="18" /> {{ soundEnabled ? 'Sonido activo' : 'Sin sonido' }}</button>
         <button class="btn btn-soft" @click="ui.toggleTheme"><component :is="ui.theme === 'dark' ? PhSun : PhMoonStars" :size="18" /> {{ ui.theme === 'dark' ? 'Modo claro' : 'Modo oscuro' }}</button>
       </div>
+      <InstalarApp :clase="'btn btn-soft w-full mb-3 text-gold'" />
       <button class="btn btn-danger w-full" @click="salir"><PhSignOut :size="18" /> Cerrar sesión</button>
     </Modal>
 
@@ -141,6 +143,7 @@ import Avatar from '@/components/ui/Avatar.vue'
 import Modal from '@/components/ui/Modal.vue'
 import SidePanel from '@/components/ui/SidePanel.vue'
 import AvisosList from './AvisosList.vue'
+import InstalarApp from '@/components/pwa/InstalarApp.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 import { useRealtimeStore } from '@/stores/realtime'
