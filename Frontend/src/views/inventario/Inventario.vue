@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader eyebrow="Gestión" title="Inventario y compras" subtitle="Stock de los productos controlados. Al registrar una compra el stock sube y, si estaba agotado por stock, vuelve solo a la carta.">
+    <PageHeader eyebrow="Gestión" title="Inventario y compras" subtitle="Stock de los productos contables (bebidas y postres empacados). Al registrar una compra el stock sube y, si estaba agotado por stock, vuelve solo a la carta.">
       <button class="btn btn-gold" @click="abrirCompra()"><PhShoppingCartSimple :size="18" /> Registrar compra</button>
     </PageHeader>
 
@@ -95,7 +95,7 @@
           <span class="num text-2xl font-semibold">{{ money((compra.cantidad || 0) * (compra.costo_unitario || 0)) }}</span>
         </div>
         <div><label class="label">Notas</label><textarea v-model="compra.notas" rows="2" class="input" placeholder="Factura, lote…" /></div>
-        <p class="text-xs text-ink-3 flex gap-1.5"><PhInfo :size="14" class="shrink-0 mt-0.5" /> El costo del producto se actualiza al de esta compra.</p>
+        <p class="text-xs text-ink-3 flex gap-1.5"><PhInfo :size="14" class="shrink-0 mt-0.5" /> El costo del producto se actualiza al de esta compra. Solo aparecen productos con control de stock (gaseosas, agua, postres empacados); los platillos de cocina no llevan inventario.</p>
         <button class="btn btn-gold btn-lg w-full" :disabled="guardando">Registrar compra</button>
       </form>
     </SidePanel>
@@ -138,7 +138,7 @@ const cargarCompras = async () => {
   try { compras.value = await adminService.compras({ desde: desde.value, hasta: hasta.value }) } catch (e) { ui.error(e) }
 }
 const abrirCompra = async (p = null) => {
-  if (!todos.value.length) todos.value = await catalogoService.productos()
+  if (!todos.value.length) todos.value = (await catalogoService.productos()).filter(x => x.controla_stock)
   Object.assign(compra, { producto_id: p?.id ?? null, proveedor: '', cantidad: null, costo_unitario: p?.costo ?? null, notas: '' })
   err.value = {}
   compraOpen.value = true

@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { PhCaretDown, PhMagnifyingGlass, PhNotePencil, PhTrash, PhCookingPot } from '@phosphor-icons/vue'
 import QtyStepper from '@/components/ui/QtyStepper.vue'
@@ -181,7 +181,18 @@ const enviar = async () => {
   } finally { enviando.value = false }
 }
 
+let pollProductos = null
+const recargarProductos = async () => {
+  try {
+    const [p, c] = await Promise.all([catalogoService.productos(), catalogoService.categorias()])
+    productos.value = p
+    categorias.value = c.filter(x => x.activa && p.some(y => y.categoria_id === x.id))
+  } catch { /* se reintenta en el siguiente ciclo */ }
+}
+onUnmounted(() => clearInterval(pollProductos))
+
 onMounted(async () => {
+  pollProductos = setInterval(() => { if (!document.hidden) recargarProductos() }, 30000)
   try {
     const [p, c, m] = await Promise.all([catalogoService.productos(), catalogoService.categorias(), catalogoService.mesas()])
     productos.value = p
