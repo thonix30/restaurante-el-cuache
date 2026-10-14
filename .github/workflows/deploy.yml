@@ -47,6 +47,21 @@ jobs:
           php-version: '8.2'
           coverage: none
 
+      - name: 🛡️ Sin credenciales en el repositorio
+        run: |
+          # Las credenciales reales van SOLO en Backend/config/*.local.php del servidor.
+          # database.php debe quedarse con los valores de XAMPP (root, sin contraseña).
+          if grep -Eq "'password'[[:space:]]*=>[[:space:]]*'[^']+'" Backend/config/database.php \
+             || grep -Eq "u[0-9]{9}_" Backend/config/database.php; then
+            echo "::error file=Backend/config/database.php::Este archivo tiene credenciales reales. Muévelas a Backend/config/database.local.php (en el servidor) y deja aquí los valores de XAMPP."
+            exit 1
+          fi
+          if git ls-files | grep -E '\.local\.php$|(^|/)\.env$'; then
+            echo "::error::Hay archivos de credenciales versionados (ver lista de arriba). Quítalos con: git rm --cached <archivo>"
+            exit 1
+          fi
+          echo "Sin credenciales en el repositorio"
+
       - name: 🔎 Sintaxis de todo el PHP
         run: |
           errores=0
