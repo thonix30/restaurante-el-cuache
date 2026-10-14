@@ -84,4 +84,10 @@ GitHub → **Actions → "CI/CD · El Cuache → Hostinger" → Run workflow** (
 ## Si algo falla
 - **La pestaña Actions marca error en "Preparar la llave SSH" o "Probar la conexión":** revisa el secreto `SSH_PRIVATE_KEY` y que la llave pública siga registrada en hPanel.
 - **El sistema dice "No se pudo conectar con la base de datos":** revisa `database.local.php`.
-- **Ves una versión vieja:** recarga con **Ctrl + F5**. El sistema es una app instalable y se actualiza sola en la siguiente visita.
+- **Ves una versión vieja:** el sistema es una app instalable (PWA): al publicar, aparece el aviso **"Hay una versión nueva · Actualizar"**. Si no aparece, recarga con **Ctrl + F5**.
+- **El despliegue avisa "La CDN de Hostinger sirve un sw.js viejo":** hPanel → Sitios web → thonixdev.es → **Rendimiento → CDN → Purgar toda la caché**. Solo hace falta si la CDN guardó el archivo antes de tiempo; `Frontend/public/.htaccess` ya le indica que no lo guarde.
+
+## App instalable (PWA)
+- **Android / computadora (Chrome, Edge):** botón **Instalar app** en el inicio de sesión y en el menú (o el ícono de instalar de la barra de direcciones).
+- **iPhone / iPad:** en Safari, **Compartir → Agregar a inicio** (el botón *Instalar app* muestra los pasos).
+- Sin internet abre igual y muestra la carta guardada; los cambios (pedidos, cobros) necesitan conexión y se avisa con "Sin conexión".

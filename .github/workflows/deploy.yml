@@ -181,3 +181,10 @@ jobs:
             echo "$code  $url"
             [ "$code" = "200" ] || echo "::warning::$url respondió $code (revisa la base de datos y Backend/config/database.local.php en el servidor)"
           done
+          # La CDN de Hostinger no debe servir un service worker viejo (la app no se actualizaría)
+          base="https://restaurantelcuache.thonixdev.es/sistema/sw.js"
+          if [ "$(curl -s --max-time 20 "$base" | md5sum)" != "$(curl -s --max-time 20 "$base?v=$GITHUB_RUN_ID" | md5sum)" ]; then
+            echo "::warning::La CDN de Hostinger sirve un sw.js viejo. Purga la caché: hPanel → Sitios web → thonixdev.es → Rendimiento → CDN → Purgar toda la caché"
+          else
+            echo "sw.js al día en la CDN"
+          fi
