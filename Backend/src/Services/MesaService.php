@@ -45,9 +45,26 @@ class MesaService
             $this->repo->save($id, $row);
         } else {
             $row['qr_token'] = bin2hex(random_bytes(12));
+            if (!isset($d['pos_x'], $d['pos_y'])) [$row['pos_x'], $row['pos_y']] = $this->lugarLibre();
             $id = $this->repo->create($row);
         }
         return MesaEntity::toArray($this->repo->findWithEstado($id), true);
+    }
+
+    /** Primer lugar del plano (en %) que no choca con otra mesa, recorriendo una cuadrícula. */
+    private function lugarLibre(): array
+    {
+        $ocupados = array_map(fn($m) => [(float)$m['pos_x'], (float)$m['pos_y']], $this->repo->allWithEstado(true));
+        for ($y = 8; $y <= 80; $y += 22) {
+            for ($x = 6; $x <= 86; $x += 14) {
+                $libre = true;
+                foreach ($ocupados as [$ox, $oy]) {
+                    if (abs($ox - $x) < 13 && abs($oy - $y) < 20) { $libre = false; break; }
+                }
+                if ($libre) return [$x, $y];
+            }
+        }
+        return [44, 44];
     }
 
     /** Guarda posiciones del plano (arrastre en modo edición). */

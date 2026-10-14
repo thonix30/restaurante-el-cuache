@@ -26,7 +26,7 @@
           </button>
           <p v-if="!sinAsignar.length" class="text-center text-sm text-ink-3 py-8">Todo asignado ✓</p>
         </div>
-        <p class="text-xs text-ink-3 mt-2">Al tocar un platillo se asigna a <b class="text-gold">Persona {{ personaSel }}</b>.</p>
+        <p class="text-xs text-ink-3 mt-2">Al tocar un platillo se asigna a <b class="text-gold">{{ nombreDe(personaSel) }}</b>.</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
@@ -34,10 +34,11 @@
              :class="[personaSel === n ? 'border-gold bg-gold/[.06]' : 'border-line bg-surface-2/40', pagadas.has(n) ? 'opacity-60' : '']"
              @click="personaSel = n" @dragover.prevent @drop="soltar(n)">
           <div class="flex items-center justify-between mb-2">
-            <p class="font-bold text-ink flex items-center gap-2">
-              <span class="grid place-items-center w-7 h-7 rounded-full text-xs num" :style="{ background: `var(--cat-${((n - 1) % 5) + 1})`, color: '#fff' }">{{ n }}</span>
-              Persona {{ n }}
-            </p>
+            <div class="font-bold text-ink flex items-center gap-2 min-w-0 flex-1">
+              <span class="grid place-items-center w-7 h-7 rounded-full text-xs num shrink-0" :style="{ background: `var(--cat-${((n - 1) % 5) + 1})`, color: '#fff' }">{{ n }}</span>
+              <input v-model.trim="nombres[n]" :placeholder="`Persona ${n}`" maxlength="40" :disabled="pagadas.has(n)" @click.stop
+                     class="nombre-persona" :aria-label="`Nombre de la persona ${n}`" />
+            </div>
             <span v-if="pagadas.has(n)" class="chip chip-ok">Pagado</span>
           </div>
           <ul class="space-y-1 min-h-[40px]">
@@ -58,7 +59,8 @@
     <!-- ═══ Partes iguales ═══ -->
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       <div v-for="n in personas" :key="n" class="rounded-2xl border border-line bg-surface-2/40 p-4" :class="pagadasIguales.has(n) ? 'opacity-60' : ''">
-        <p class="font-bold text-ink">Persona {{ n }}</p>
+        <input v-model.trim="nombres[n]" :placeholder="`Persona ${n}`" maxlength="40" :disabled="pagadasIguales.has(n)"
+               class="nombre-persona font-bold" :aria-label="`Nombre de la persona ${n}`" />
         <p class="num text-3xl font-semibold text-ink mt-2">{{ money(parteIgual(n)) }}</p>
         <button class="btn btn-gold w-full mt-3" :disabled="pagadasIguales.has(n) || parteIgual(n) <= 0" @click="cobrarIgual(n)">
           {{ pagadasIguales.has(n) ? 'Pagado' : 'Cobrar' }}
@@ -93,6 +95,9 @@ const emit = defineEmits(['update:modelValue', 'cobrado'])
 const modo = ref('platillo')
 const personas = ref(2)
 const personaSel = ref(1)
+// Nombres de cada persona (opcional): si se deja vacío queda "Persona N"
+const nombres = ref({})
+const nombreDe = (n) => nombres.value[n] || `Persona ${n}`
 const asignacion = ref({})       // key de unidad → persona
 const pagadas = ref(new Set())
 const pagadasIguales = ref(new Set())
@@ -102,7 +107,7 @@ const cobro = reactive({ open: false, monto: 0, etiqueta: '', items: null, perso
 watch(() => props.modelValue, (v) => {
   if (!v) return
   personas.value = Math.max(2, Math.min(12, props.cuenta?.personas || 2))
-  asignacion.value = {}; pagadas.value = new Set(); pagadasIguales.value = new Set(); personaSel.value = 1
+  asignacion.value = {}; pagadas.value = new Set(); pagadasIguales.value = new Set(); personaSel.value = 1; nombres.value = {}
   unidades.value = calcularUnidades()
 })
 
@@ -131,7 +136,7 @@ const cobrarPersona = (n) => {
   const items = {}
   deLaPersona(n).forEach(u => { items[u.item_id] = (items[u.item_id] || 0) + 1 })
   Object.assign(cobro, {
-    open: true, monto: Math.min(subtotal(n), props.cuenta.saldo), etiqueta: `Persona ${n}`,
+    open: true, monto: Math.min(subtotal(n), props.cuenta.saldo), etiqueta: nombreDe(n),
     items: Object.entries(items).map(([item_id, cantidad]) => ({ item_id: Number(item_id), cantidad })), persona: n, modo: 'platillo',
   })
 }
@@ -144,7 +149,7 @@ const parteIgual = (n) => {
   const ultima = [...Array(personas.value).keys()].map(i => i + 1).filter(i => !pagadasIguales.value.has(i)).pop()
   return n === ultima ? Math.round((saldo - base * (pendientesIguales.value - 1)) * 100) / 100 : base
 }
-const cobrarIgual = (n) => Object.assign(cobro, { open: true, monto: parteIgual(n), etiqueta: `Persona ${n}`, items: null, persona: n, modo: 'iguales' })
+const cobrarIgual = (n) => Object.assign(cobro, { open: true, monto: parteIgual(n), etiqueta: nombreDe(n), items: null, persona: n, modo: 'iguales' })
 
 const onCobrado = (r) => {
   if (cobro.modo === 'platillo') pagadas.value = new Set([...pagadas.value, cobro.persona])
@@ -153,3 +158,10 @@ const onCobrado = (r) => {
   if (r.completo) emit('update:modelValue', false)
 }
 </script>
+
+<style scoped>
+.nombre-persona { min-width: 0; width: 100%; background: transparent; border: 0; border-bottom: 1px dashed rgb(var(--line)); padding: 2px 0; color: rgb(var(--ink)); outline: none; }
+.nombre-persona:focus { border-bottom-color: rgb(var(--gold)); }
+.nombre-persona::placeholder { color: rgb(var(--ink)); opacity: 1; }
+.nombre-persona:focus::placeholder { opacity: .35; }
+</style>

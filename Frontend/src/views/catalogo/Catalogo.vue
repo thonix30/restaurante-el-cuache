@@ -13,6 +13,14 @@
         <button :class="{ on: tab === 'mesas' }" @click="tab = 'mesas'">Mesas <span class="num text-ink-3">{{ mesas.length }}</span></button>
       </div>
       <template v-if="tab === 'productos'">
+      <div v-if="agotadosManual.length" class="card border-danger/40 p-4 mb-4 flex flex-col sm:flex-row sm:items-center gap-3" data-reveal>
+        <span class="grid place-items-center w-11 h-11 rounded-2xl bg-danger/15 text-danger shrink-0"><PhProhibit :size="22" weight="duotone" /></span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-ink">{{ agotadosManual.length }} platillo{{ agotadosManual.length === 1 ? '' : 's' }} marcado{{ agotadosManual.length === 1 ? '' : 's' }} como agotado{{ agotadosManual.length === 1 ? '' : 's' }}</p>
+          <p class="text-sm text-ink-3 truncate">No se pueden pedir: {{ agotadosManual.map(x => x.nombre).join(', ') }}</p>
+        </div>
+        <button class="btn btn-soft btn-sm" :disabled="reactivando" @click="reactivarTodos"><PhArrowCounterClockwise :size="16" /> Volver a poner en la carta</button>
+      </div>
         <div class="relative flex-1 min-w-[200px]">
           <PhMagnifyingGlass :size="17" class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
           <input v-model="q" type="search" class="input h-10 pl-9" placeholder="Buscar…" />
@@ -47,7 +55,10 @@
               <span class="text-xs" :class="p.controla_stock ? (p.stock_bajo ? 'text-warn font-bold' : 'text-ink-3') : 'text-ink-3'">
                 {{ p.controla_stock ? `Stock ${p.stock}` : 'Sin control de stock' }}
               </span>
-              <button type="button" class="switch" :class="{ on: p.disponible }" role="switch" :aria-checked="p.disponible" :aria-label="'Disponible: ' + p.nombre" @click="toggleDisp(p)" />
+              <label class="flex items-center gap-2 cursor-pointer">
+                <span class="text-[11px] font-bold" :class="p.disponible ? 'text-ok' : 'text-danger'">{{ p.disponible ? 'En carta' : 'Agotado' }}</span>
+                <button type="button" class="switch" :class="{ on: p.disponible }" role="switch" :aria-checked="p.disponible" :aria-label="'Disponible: ' + p.nombre" @click="toggleDisp(p)" />
+              </label>
             </div>
           </div>
         </article>
@@ -63,7 +74,7 @@
               <td class="text-right num text-ink-3">{{ money(p.costo) }}</td>
               <td class="text-right num" :class="p.margen >= 55 ? 'text-ok' : 'text-warn'">{{ p.margen }}%</td>
               <td class="text-right num">{{ p.controla_stock ? p.stock : '—' }}</td>
-              <td @click.stop><button type="button" class="switch" :class="{ on: p.disponible }" role="switch" :aria-checked="p.disponible" @click="toggleDisp(p)" /></td>
+              <td @click.stop><span class="flex items-center gap-2"><button type="button" class="switch" :class="{ on: p.disponible }" role="switch" :aria-checked="p.disponible" @click="toggleDisp(p)" /><span class="text-[11px] font-bold" :class="p.disponible ? 'text-ok' : 'text-danger'">{{ p.disponible ? 'En carta' : 'Agotado' }}</span></span></td>
             </tr>
           </tbody>
         </table>
@@ -160,7 +171,7 @@
 
 <script setup>
 import { ref, computed, onMounted, reactive } from 'vue'
-import { PhPlus, PhMagnifyingGlass, PhSquaresFour, PhRows, PhStar, PhForkKnife, PhCaretUp, PhCaretDown, PhPencilSimple, PhTrash } from '@phosphor-icons/vue'
+import { PhProhibit, PhArrowCounterClockwise, PhPlus, PhMagnifyingGlass, PhSquaresFour, PhRows, PhStar, PhForkKnife, PhCaretUp, PhCaretDown, PhPencilSimple, PhTrash } from '@phosphor-icons/vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import StatusChip from '@/components/ui/StatusChip.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
@@ -205,8 +216,22 @@ const borrar = async (p) => {
   if (!await confirmar(`¿Eliminar «${p.nombre}»?`, 'Sale de la carta. El historial de ventas conserva su nombre y costo.', { confirmar: 'Eliminar', peligro: true })) return
   try { await catalogoService.borrarProducto(p.id); formOpen.value = false; ui.toast('Platillo eliminado', 'info'); cargar() } catch (e) { ui.error(e) }
 }
+const agotadosManual = computed(() => productos.value.filter(p => !p.disponible && p.agotado_motivo !== 'stock'))
+const reactivando = ref(false)
+const reactivarTodos = async () => {
+  if (!await confirmar('¿Volver a poner en la carta?', agotadosManual.value.map(x => x.nombre).join(', '), { confirmar: 'Sí, reactivar' })) return
+  reactivando.value = true
+  for (const p of [...agotadosManual.value]) {
+    try { Object.assign(p, await catalogoService.disponibilidad(p.id, true)) } catch (e) { ui.error(e) }
+  }
+  reactivando.value = false
+  ui.toast('Platillos de vuelta en la carta')
+}
 const toggleDisp = async (p, stock) => {
-  try { Object.assign(p, await catalogoService.disponibilidad(p.id, !p.disponible, stock)) } catch (e) {
+  try {
+    Object.assign(p, await catalogoService.disponibilidad(p.id, !p.disponible, stock))
+    ui.toast(p.disponible ? `${p.nombre} vuelve a la carta` : `${p.nombre} marcado como agotado: ya no se puede pedir`, p.disponible ? 'success' : 'warn')
+  } catch (e) {
     if (e.payload?.requiere_stock) {
       const n = await pedirNumero(`Stock de ${p.nombre}`, 'Se agotó por stock. ¿Cuántas unidades hay ahora?', { min: 1, valor: 10 })
       if (n) toggleDisp(p, n)
@@ -237,7 +262,7 @@ const editarMesa = (m) => {
 }
 const guardarMesa = async () => {
   try {
-    await catalogoService.guardarMesa({ id: mesa.id, numero: mesa.numero, capacidad: mesa.capacidad, zona: mesa.zona, forma: mesa.forma, nombre: mesa.nombre_custom || null, ...(mesa.id ? {} : { pos_x: 40, pos_y: 40 }) })
+    await catalogoService.guardarMesa({ id: mesa.id, numero: mesa.numero, capacidad: mesa.capacidad, zona: mesa.zona, forma: mesa.forma, nombre: mesa.nombre_custom || null })
     mesaOpen.value = false; ui.toast('Mesa guardada'); cargar()
   } catch (e) { ui.error(e) }
 }
