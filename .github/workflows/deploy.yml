@@ -1,0 +1,155 @@
+name: CI/CD · El Cuache → Hostinger
+
+# CI  (verificar): en cada push a cualquier rama y en cada Pull Request.
+#      Revisa la sintaxis de todo el PHP, compila el sistema y arma la carpeta
+#      de despliegue. Si algo falla, el PR muestra ❌ y no se despliega nada.
+# CD  (desplegar): solo cuando cambia "main" (o a mano desde Actions) y si CI pasó.
+#      Sube por FTP a public_html/restaurantelcuache → https://restaurantelcuache.thonixdev.es
+#
+# Estructura en el servidor:
+#   /            → Sitio público (Sitio/)
+#   /sistema/    → Sistema administrador, carta y kiosco (Frontend/dist)
+#   /Backend/    → API PHP
+#
+# Nunca se suben ni se borran en el servidor: Backend/config/*.local.php
+# (credenciales), Backend/uploads/f_* (fotos subidas) y Backend/storage/
+# documentos|asistencia (archivos privados del personal).
+#
+# Secretos del repositorio (Settings → Secrets and variables → Actions):
+#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
+# Variable opcional (pestaña Variables): FTP_SERVER_DIR, carpeta destino
+#   relativa a la raíz de la cuenta FTP, terminada en "/" (por defecto: restaurantelcuache/)
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────── CI ───────────────────────────────
+  verificar:
+    name: 🧪 Verificar y compilar
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Obtener el código
+        uses: actions/checkout@v4
+
+      - name: 🐘 PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: 🔎 Sintaxis de todo el PHP
+        run: |
+          errores=0
+          while IFS= read -r -d '' f; do
+            php -l "$f" > /dev/null || errores=$((errores + 1))
+          done < <(find Backend -name '*.php' -print0)
+          [ "$errores" -eq 0 ] || { echo "::error::$errores archivo(s) PHP con errores"; exit 1; }
+          echo "PHP: sin errores de sintaxis"
+
+      - name: ⚙️ Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+
+      - name: 📦 Compilar el sistema
+        working-directory: Frontend
+        env:
+          # En el servidor la app vive en /sistema y la API en /Backend
+          VITE_API_URL: ../Backend/api/v1
+        run: |
+          npm ci
+          npm run build
+
+      - name: 📁 Armar la carpeta de despliegue
+        run: |
+          mkdir deploy
+          # Sitio público en la raíz; sus enlaces apuntan a /sistema y /Backend
+          cp -r Sitio/. deploy/
+          sed -i 's#\.\./Frontend/dist/#sistema/#g; s#\.\./Backend/#Backend/#g' deploy/index.html deploy/js/main.js
+          grep -q '\.\./Frontend\|\.\./Backend' deploy/index.html deploy/js/main.js && { echo "::error::Quedaron rutas locales en el sitio"; exit 1; }
+          # Sistema compilado
+          cp -r Frontend/dist deploy/sistema
+          # API, sin archivos locales ni subidos
+          cp -r Backend deploy/Backend
+          rm -f deploy/Backend/config/*.local.php
+          find deploy/Backend/uploads -type f ! -name '.htaccess' -delete
+          rm -rf deploy/Backend/storage/documentos deploy/Backend/storage/asistencia
+          rm -f deploy/README.md
+          echo "Contenido a desplegar:" && du -sh deploy/* | sort -h
+
+      - name: 📤 Guardar la carpeta para el despliegue
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy
+          path: deploy/
+          include-hidden-files: true
+          retention-days: 3
+
+  # ─────────────────────────────── CD ───────────────────────────────
+  desplegar:
+    name: 🚀 Desplegar en Hostinger
+    needs: verificar
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: produccion
+      url: https://restaurantelcuache.thonixdev.es
+    concurrency:
+      group: deploy-hostinger
+      cancel-in-progress: false
+    steps:
+      - name: 📥 Descargar la carpeta compilada
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy
+          path: deploy/
+
+      - name: 🔐 Revisar secretos FTP
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          faltan=""
+          [ -n "$FTP_SERVER" ]   || faltan="$faltan FTP_SERVER"
+          [ -n "$FTP_USERNAME" ] || faltan="$faltan FTP_USERNAME"
+          [ -n "$FTP_PASSWORD" ] || faltan="$faltan FTP_PASSWORD"
+          [ -z "$faltan" ] || { echo "::error::Faltan secretos del repositorio:$faltan (Settings → Secrets and variables → Actions)"; exit 1; }
+
+      - name: 🚀 Subir por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'restaurantelcuache/' }}
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            Backend/config/*.local.php
+            Backend/uploads/f_*
+            Backend/storage/documentos/**
+            Backend/storage/asistencia/**
+
+      - name: ✅ Comprobar que el sitio responde
+        run: |
+          sleep 5
+          for url in "https://restaurantelcuache.thonixdev.es/" "https://restaurantelcuache.thonixdev.es/sistema/" "https://restaurantelcuache.thonixdev.es/Backend/api/v1/public/caja"; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url" || echo 000)
+            echo "$code  $url"
+            [ "$code" = "200" ] || echo "::warning::$url respondió $code (revisa la base de datos y Backend/config/database.local.php en el servidor)"
+          done

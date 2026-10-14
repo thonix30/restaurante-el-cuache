@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-// En producción la app vive en Frontend/dist y la API en Backend/api/v1:
-// se calcula relativa a la página para funcionar en cualquier carpeta/dominio.
-const baseURL = import.meta.env.VITE_API_URL
-    || new URL('../../Backend/api/v1', window.location.href.split('#')[0]).href;
+// Ruta de la API relativa a la página, para funcionar en cualquier carpeta o dominio:
+//  - XAMPP: la app vive en Frontend/dist → ../../Backend/api/v1 (valor por defecto)
+//  - Hostinger: la app vive en /sistema → ../Backend/api/v1 (VITE_API_URL al compilar)
+// VITE_API_URL también acepta una URL absoluta (npm run dev usa la de XAMPP).
+const baseURL = new URL(import.meta.env.VITE_API_URL || '../../Backend/api/v1', window.location.href.split('#')[0]).href;
 
 export const TOKEN_KEY = 'cuache_token';
 export const USER_KEY = 'cuache_usuario';
