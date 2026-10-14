@@ -5,6 +5,7 @@
         <button :class="{ on: vista === 'plano' }" @click="vista = 'plano'"><PhSquaresFour :size="15" class="inline -mt-0.5" /> Plano</button>
         <button :class="{ on: vista === 'lista' }" @click="vista = 'lista'"><PhList :size="15" class="inline -mt-0.5" /> Lista</button>
       </div>
+      <button v-if="auth.isAdmin && editando" class="btn btn-soft btn-sm" :disabled="creandoMesa" @click="agregarMesa"><PhPlus :size="16" weight="bold" /> Agregar mesa</button>
       <button v-if="auth.isAdmin && vista === 'plano'" class="btn btn-sm" :class="editando ? 'btn-gold' : 'btn-soft'" @click="toggleEditar">
         <component :is="editando ? PhFloppyDisk : PhPencilSimple" :size="16" /> {{ editando ? 'Guardar plano' : 'Editar plano' }}
       </button>
@@ -90,7 +91,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PhSquaresFour, PhList, PhPencilSimple, PhFloppyDisk, PhNotePencil, PhBellRinging, PhReceipt, PhLockKey, PhHandGrabbing } from '@phosphor-icons/vue'
+import { PhPlus, PhSquaresFour, PhList, PhPencilSimple, PhFloppyDisk, PhNotePencil, PhBellRinging, PhReceipt, PhLockKey, PhHandGrabbing } from '@phosphor-icons/vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import SidePanel from '@/components/ui/SidePanel.vue'
 import StatusChip from '@/components/ui/StatusChip.vue'
@@ -188,6 +189,20 @@ const mover = (e) => {
   m.pos_y = Math.max(0, Math.min(84, (e.clientY - drag.dy - r.top) / r.height * 100))
 }
 const soltar = () => { drag = null; window.removeEventListener('pointermove', mover) }
+// Agrega la siguiente mesa en un lugar libre del plano; luego se acomoda arrastrándola
+const creandoMesa = ref(false)
+const agregarMesa = async () => {
+  creandoMesa.value = true
+  try {
+    const numero = Math.max(0, ...mesas.value.map(m => m.numero)) + 1
+    // Guarda primero las posiciones que se hayan movido, para que la nueva no caiga encima
+    await catalogoService.posiciones(mesas.value.map(m => ({ id: m.id, pos_x: Math.round(m.pos_x * 10) / 10, pos_y: Math.round(m.pos_y * 10) / 10 })))
+    const nueva = await catalogoService.guardarMesa({ numero, capacidad: 4, zona: 'Salón', forma: 'cuadrada' })
+    mesas.value = [...mesas.value, nueva]
+    ui.toast(`Mesa ${numero} agregada: arrástrala a su lugar y guarda el plano`)
+  } catch (e) { ui.error(e) }
+  creandoMesa.value = false
+}
 const toggleEditar = async () => {
   if (!editando.value) { editando.value = true; panel.value = false; return }
   try {

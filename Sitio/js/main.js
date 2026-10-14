@@ -241,14 +241,13 @@ async function cargarCarta() {
         }
     } catch { /* sin API: se usa la lista de respaldo */ }
 
-    // Todas las categorías, en el orden configurado en el sistema; dentro de cada
-    // una, primero los recomendados. Máx. 4 platillos por categoría (la carta
-    // completa está en el botón "Ver la carta completa").
+    // Todas las categorías y todos los platillos disponibles, en el orden
+    // configurado en el sistema; dentro de cada categoría, primero los recomendados.
     const grupos = new Map(ordenCategorias.map(n => [n, []]))
     for (const p of [...platillos].sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0))) {
         const c = p.categoria || 'De la casa'
         if (!grupos.has(c)) grupos.set(c, [])
-        if (grupos.get(c).length < 4) grupos.get(c).push(p)
+        grupos.get(c).push(p)
     }
     const html = [...grupos.entries()].filter(([, items]) => items.length).map(([cat, items]) => `
         <div class="pizarra__grupo">
