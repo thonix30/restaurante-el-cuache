@@ -4,21 +4,23 @@ name: CI/CD · El Cuache → Hostinger
 #      Revisa la sintaxis de todo el PHP, compila el sistema y arma la carpeta
 #      de despliegue. Si algo falla, el PR muestra ❌ y no se despliega nada.
 # CD  (desplegar): solo cuando cambia "main" (o a mano desde Actions) y si CI pasó.
-#      Sube por FTP a public_html/restaurantelcuache → https://restaurantelcuache.thonixdev.es
+#      Sube por SSH + rsync a public_html/restaurantelcuache
+#      → https://restaurantelcuache.thonixdev.es
 #
 # Estructura en el servidor:
 #   /            → Sitio público (Sitio/)
 #   /sistema/    → Sistema administrador, carta y kiosco (Frontend/dist)
 #   /Backend/    → API PHP
 #
-# Nunca se suben ni se borran en el servidor: Backend/config/*.local.php
-# (credenciales), Backend/uploads/f_* (fotos subidas) y Backend/storage/
-# documentos|asistencia (archivos privados del personal).
+# rsync deja el servidor idéntico a la carpeta compilada (borra lo que ya no
+# existe), PERO nunca toca: Backend/config/*.local.php (credenciales),
+# Backend/uploads/f_* (fotos subidas) ni Backend/storage/documentos|asistencia
+# (archivos privados del personal).
 #
-# Secretos del repositorio (Settings → Secrets and variables → Actions):
-#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
-# Variable opcional (pestaña Variables): FTP_SERVER_DIR, carpeta destino
-#   relativa a la raíz de la cuenta FTP, terminada en "/" (por defecto: restaurantelcuache/)
+# Secreto del repositorio (Settings → Secrets and variables → Actions):
+#   SSH_PRIVATE_KEY → contenido de la llave privada de despliegue (elcuache_deploy)
+# Variables opcionales (pestaña Variables) si algún día cambia el servidor:
+#   SSH_HOST (145.79.4.70) · SSH_PORT (65002) · SSH_USER (u622087758) · DEPLOY_PATH
 
 on:
   push:
@@ -98,7 +100,7 @@ jobs:
 
   # ─────────────────────────────── CD ───────────────────────────────
   desplegar:
-    name: 🚀 Desplegar en Hostinger
+    name: 🚀 Desplegar en Hostinger (SSH)
     needs: verificar
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
@@ -108,6 +110,11 @@ jobs:
     concurrency:
       group: deploy-hostinger
       cancel-in-progress: false
+    env:
+      SSH_HOST: ${{ vars.SSH_HOST || '145.79.4.70' }}
+      SSH_PORT: ${{ vars.SSH_PORT || '65002' }}
+      SSH_USER: ${{ vars.SSH_USER || 'u622087758' }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/home/u622087758/domains/thonixdev.es/public_html/restaurantelcuache' }}
     steps:
       - name: 📥 Descargar la carpeta compilada
         uses: actions/download-artifact@v4
@@ -115,39 +122,45 @@ jobs:
           name: deploy
           path: deploy/
 
-      - name: 🔐 Revisar secretos FTP
+      - name: 🔐 Preparar la llave SSH
         env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          faltan=""
-          [ -n "$FTP_SERVER" ]   || faltan="$faltan FTP_SERVER"
-          [ -n "$FTP_USERNAME" ] || faltan="$faltan FTP_USERNAME"
-          [ -n "$FTP_PASSWORD" ] || faltan="$faltan FTP_PASSWORD"
-          [ -z "$faltan" ] || { echo "::error::Faltan secretos del repositorio:$faltan (Settings → Secrets and variables → Actions)"; exit 1; }
+          [ -n "$SSH_PRIVATE_KEY" ] || { echo "::error::Falta el secreto SSH_PRIVATE_KEY (Settings → Secrets and variables → Actions)"; exit 1; }
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          # Huella del servidor de Hostinger (evita conectarse a un impostor)
+          cat >> ~/.ssh/known_hosts <<'KNOWN'
+          [145.79.4.70]:65002 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFnGhWxjboDRRepP0qicN5/LVQRqXxVwDFb8PGcYWiDp
+          [145.79.4.70]:65002 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBA+p18PwtmyqwbW6IwLuBbIzZb6eDCEAoUCd/VMmnJiKb+OertD4x47/nzSCcKUVPOUwwNRE1w4jev7Yr+KMXy8=
+          KNOWN
+          sed -i 's/^ *//' ~/.ssh/known_hosts
+          echo "SSH=ssh -i $HOME/.ssh/deploy -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" >> "$GITHUB_ENV"
 
-      - name: 🚀 Subir por FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: ${{ vars.FTP_SERVER_DIR || 'restaurantelcuache/' }}
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            Backend/config/*.local.php
-            Backend/uploads/f_*
-            Backend/storage/documentos/**
-            Backend/storage/asistencia/**
+      - name: 🔌 Probar la conexión
+        run: $SSH "$SSH_USER@$SSH_HOST" 'echo "Conectado a $(hostname) · $(php -v | head -1)"'
+
+      - name: 🚀 Sincronizar con rsync
+        run: |
+          $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$DEPLOY_PATH'"
+          rsync -az --delete --itemize-changes \
+            -e "$SSH" \
+            --filter='P /Backend/config/*.local.php' \
+            --filter='P /Backend/uploads/f_*' \
+            --filter='P /Backend/storage/documentos/' \
+            --filter='P /Backend/storage/asistencia/' \
+            deploy/ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/" | tail -n 40
+
+      - name: 🛠️ Preparar carpetas en el servidor
+        run: |
+          $SSH "$SSH_USER@$SSH_HOST" "cd '$DEPLOY_PATH' && \
+            mkdir -p Backend/uploads Backend/storage/documentos Backend/storage/asistencia && \
+            chmod 755 Backend/uploads Backend/storage/documentos Backend/storage/asistencia && \
+            ( [ -f Backend/config/database.local.php ] && echo 'database.local.php: presente' || echo '::warning::Falta Backend/config/database.local.php en el servidor' )"
 
       - name: ✅ Comprobar que el sitio responde
         run: |
-          sleep 5
+          sleep 3
           for url in "https://restaurantelcuache.thonixdev.es/" "https://restaurantelcuache.thonixdev.es/sistema/" "https://restaurantelcuache.thonixdev.es/Backend/api/v1/public/caja"; do
             code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url" || echo 000)
             echo "$code  $url"
