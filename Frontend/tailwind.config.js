@@ -12,8 +12,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Manrope', 'system-ui', 'sans-serif'],
-                serif: ['Fraunces', 'Georgia', 'serif'],
+                sans: ['"Familjen Grotesk"', 'system-ui', 'sans-serif'],
+                serif: ['Caprasimo', 'Georgia', 'serif'],
                 mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
             },
             colors: {

@@ -71,10 +71,10 @@ watch(base, () => generar())
 
 // Tarjeta imprimible (estilos en línea: se usa también en la ventana de impresión)
 const tarjetaHtml = (m) => `
-  <div style="width:260px;margin:0 auto;padding:22px 20px 18px;border-radius:22px;background:#FBF5E6;color:#231F1C;text-align:center;font-family:Manrope,Arial,sans-serif;border:1.5px solid #231F1C;box-sizing:border-box">
+  <div style="width:260px;margin:0 auto;padding:22px 20px 18px;border-radius:22px;background:#FBF5E6;color:#231F1C;text-align:center;font-family:'Familjen Grotesk',Arial,sans-serif;border:1.5px solid #231F1C;box-sizing:border-box">
     <img src="${logoUrl}" style="width:96px;height:96px;object-fit:contain;display:block;margin:0 auto" alt="El Cuache"/>
-    <div style="font:700 11px Manrope,Arial;letter-spacing:.25em;text-transform:uppercase;margin-top:6px;color:#8a6a2c">Escanea y pide</div>
-    <div style="font:500 34px Fraunces,Georgia,serif;line-height:1;margin:6px 0 12px">Mesa ${m.numero}</div>
+    <div style="font:700 11px 'Familjen Grotesk',Arial;letter-spacing:.25em;text-transform:uppercase;margin-top:6px;color:#8a6a2c">Escanea y pide</div>
+    <div style="font:400 34px Caprasimo,Georgia,serif;line-height:1;margin:6px 0 12px">Mesa ${m.numero}</div>
     <img src="${qrs.value[m.id]}" style="width:190px;height:190px;display:block;margin:0 auto;border-radius:10px;background:#fff;padding:6px" alt="QR"/>
     <div style="font-size:11px;margin-top:12px;line-height:1.4;color:#5a5047">Menú · Llamar al mesero · Pedir la cuenta</div>
   </div>`
@@ -83,7 +83,7 @@ const imprimir = (lista = mesas.value) => {
   const w = window.open('', '_blank')
   if (!w) return ui.toast('Permite las ventanas emergentes para imprimir', 'warn')
   w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR El Cuache</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Familjen+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>@page{margin:12mm}body{margin:0;background:#fff}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14mm 8mm;justify-items:center}
     .grid>div{break-inside:avoid}</style></head><body><div class="grid">${lista.map(m => `<div>${tarjetaHtml(m)}</div>`).join('')}</div>
     <script>window.onload=()=>setTimeout(()=>{window.print()},400)<\/script></body></html>`)

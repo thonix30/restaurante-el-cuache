@@ -7,46 +7,50 @@
    Noche de café: espresso profundo, crema del logo y dorado cálido.
    Colores en "R G B" para usarlos con opacidad desde Tailwind.
    ════════════════════════════════════════════════════════════════════ */
+/* Paleta del sitio público: tintes de los tejidos de Huehuetenango
+   (cochinilla, achiote, maíz, añil, verde monte) sobre carbón de comal y masa. */
 :root,
 :root[data-theme="dark"] {
-    --bg: 18 15 13;
-    --surface: 28 24 21;
-    --surface-2: 37 32 28;
-    --surface-3: 48 42 37;
-    --line: 63 55 48;
-    --ink: 245 236 220;
-    --ink-2: 203 190 171;
-    --ink-3: 145 133 117;
-    --gold: 214 167 94;
-    --gold-2: 238 203 142;
-    --on-gold: 26 20 14;
-    --sage: 138 156 116;
-    --ok: 116 182 128;
-    --warn: 232 168 66;
-    --danger: 196 108 98;
-    --muted: 125 119 112;
-    --info: 120 160 200;
+    --bg: 23 17 13;          /* carbón */
+    --surface: 35 25 19;
+    --surface-2: 47 34 26;
+    --surface-3: 61 45 34;
+    --line: 84 63 48;
+    --ink: 243 228 197;      /* masa */
+    --ink-2: 214 195 160;
+    --ink-3: 163 141 111;
+    --gold: 239 181 46;      /* maíz */
+    --gold-2: 247 207 112;
+    --on-gold: 23 17 13;
+    --sage: 98 158 112;      /* verde monte */
+    --ok: 104 178 112;
+    --warn: 232 118 54;      /* achiote */
+    --danger: 214 74 70;     /* cochinilla */
+    --muted: 128 114 98;
+    --info: 116 146 214;     /* añil */
+    --accent: 179 38 42;     /* cochinilla del sitio */
     color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-    --bg: 248 242 229;
-    --surface: 255 252 246;
-    --surface-2: 243 235 219;
-    --surface-3: 233 222 202;
-    --line: 222 208 184;
-    --ink: 35 31 28;
-    --ink-2: 88 79 69;
-    --ink-3: 135 122 105;
-    --gold: 160 112 40;
-    --gold-2: 190 140 62;
-    --on-gold: 255 250 240;
-    --sage: 98 120 78;
-    --ok: 46 128 70;
-    --warn: 180 115 18;
-    --danger: 170 70 60;
-    --muted: 140 132 122;
-    --info: 50 105 160;
+    --bg: 243 228 197;       /* masa */
+    --surface: 251 242 222;
+    --surface-2: 238 221 186;
+    --surface-3: 229 207 163;
+    --line: 210 182 134;
+    --ink: 23 17 13;
+    --ink-2: 82 61 45;
+    --ink-3: 128 103 78;
+    --gold: 179 38 42;       /* en claro el acento es cochinilla, como el sitio */
+    --gold-2: 210 72 58;
+    --on-gold: 251 242 222;
+    --sage: 47 93 58;
+    --ok: 47 120 64;
+    --warn: 190 88 22;
+    --danger: 150 28 32;
+    --muted: 140 122 100;
+    --info: 35 54 104;
+    --accent: 179 38 42;
     color-scheme: light;
 }
 
@@ -63,7 +67,7 @@
     }
 
     h1, h2, h3, .font-display {
-        font-family: Fraunces, Georgia, serif;
+        font-family: Caprasimo, Georgia, serif;
         font-optical-sizing: auto;
         letter-spacing: -0.015em;
     }
@@ -223,7 +227,7 @@
     border-radius: 22px; padding: 1.75rem 1.5rem 1.4rem; width: min(26rem, calc(100vw - 2rem));
     box-shadow: 0 30px 80px -30px rgb(0 0 0 / .8);
 }
-.cuache-swal .swal2-title { font-family: Fraunces, serif; font-weight: 500; font-size: 1.4rem; color: rgb(var(--ink)); padding: 0; }
+.cuache-swal .swal2-title { font-family: Caprasimo, serif; font-weight: 400; font-size: 1.4rem; color: rgb(var(--ink)); padding: 0; }
 .cuache-swal .swal2-html-container { color: rgb(var(--ink-2)); font-size: .9rem; margin: .7rem 0 0; }
 .cuache-swal .swal2-actions { gap: .6rem; margin-top: 1.4rem; width: 100%; }
 .cuache-swal .swal2-actions .btn { flex: 1; }
@@ -238,3 +242,36 @@
 /* Paleta categórica de gráficos (validada: luminosidad, croma, daltonismo y contraste) */
 :root, :root[data-theme="dark"] { --cat-1: #B57F2C; --cat-2: #4B86D6; --cat-3: #4E9A52; --cat-4: #B068CC; --cat-5: #D4603F; --cat-other: #7D7770; }
 :root[data-theme="light"] { --cat-1: #A0702A; --cat-2: #3A6AA8; --cat-3: #4A8A3A; --cat-4: #8A55A0; --cat-5: #B0553A; --cat-other: #8C847A; }
+
+/* ════ Rama diseno-sitio: detalles del sitio público ════ */
+h1, h2, h3, .font-display { letter-spacing: 0; }
+.font-serif { font-weight: 400 !important; }
+
+/* Botón principal: plano, con sombra dura como los botones del sitio */
+.btn-gold { background: rgb(var(--gold)); box-shadow: 0 3px 0 rgb(0 0 0 / .35); }
+.btn-gold:hover { filter: none; box-shadow: 0 5px 0 rgb(0 0 0 / .35); }
+.btn-gold:active { box-shadow: 0 1px 0 rgb(0 0 0 / .35); }
+
+/* Tarjetas con borde tejido arriba al pasar el mouse */
+.card { position: relative; }
+.card-hover::after { content: ""; position: absolute; left: 14px; right: 14px; top: -1px; height: 3px; border-radius: 0 0 3px 3px; opacity: 0; transition: opacity .3s;
+    background: linear-gradient(90deg, #B3262A 0 20%, #EFB52E 0 40%, #233668 0 60%, #2F5D3A 0 80%, #E26A2C 0); }
+.card-hover:hover::after { opacity: 1; }
+
+/* Faja tejida (separador) */
+.faja-tejida { height: 6px; background:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgb(0 0 0 / .18) 18px 19px),
+    linear-gradient(180deg, #B3262A 0 30%, #EFB52E 30% 45%, #233668 45% 70%, #2F5D3A 70% 85%, #E26A2C 85%); }
+
+/* Etiquetas pequeñas con rombo, como en el sitio */
+.eyebrow { color: rgb(var(--gold)); }
+.eyebrow::before { content: ""; display: inline-block; width: .5em; height: .5em; margin-right: .55em; background: currentColor; transform: rotate(45deg) translateY(-.1em); }
+
+/* Rombos de huipil en el fondo, muy tenues */
+.grain::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23EFB52E' stroke-width='1.5'%3E%3Cpath d='M28 4 L52 28 L28 52 L4 28 Z'/%3E%3Cpath d='M28 16 L40 28 L28 40 L16 28 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 56px 56px; }
+:root[data-theme="light"] .grain::after { opacity: .08; filter: hue-rotate(-40deg) saturate(2); }
+
+/* Indicador del menú activo con los colores del tejido */
+aside nav a .bg-gold { background: linear-gradient(180deg, #B3262A, #EFB52E, #2F5D3A) !important; }

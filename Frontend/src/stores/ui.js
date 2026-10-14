@@ -11,7 +11,7 @@ export const useUiStore = defineStore('ui', () => {
 
     const applyTheme = () => {
         document.documentElement.setAttribute('data-theme', theme.value)
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.value === 'dark' ? '#14110F' : '#F8F2E5')
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.value === 'dark' ? '#17110D' : '#F3E4C5')
     }
     const toggleTheme = () => {
         theme.value = theme.value === 'dark' ? 'light' : 'dark'
