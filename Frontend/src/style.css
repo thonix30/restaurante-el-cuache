@@ -147,8 +147,9 @@
     .chip-sage { @apply bg-sage/15 text-sage border-sage/30; }
 
     /* ── Control segmentado ────────────────────────────────────── */
-    .seg { @apply inline-flex p-1 rounded-xl bg-surface-2 border border-line/70 gap-1; }
-    .seg > button { @apply px-3 h-8 rounded-lg text-xs font-bold text-ink-3 transition whitespace-nowrap; }
+    .seg { @apply inline-flex p-1 rounded-xl bg-surface-2 border border-line/70 gap-1 max-w-full overflow-x-auto; scrollbar-width: none; }
+    .seg::-webkit-scrollbar { display: none; }
+    .seg > button { @apply px-3 h-8 rounded-lg text-xs font-bold text-ink-3 transition whitespace-nowrap shrink-0; }
     .seg > button.on { @apply bg-surface text-ink shadow-soft; }
 
     /* ── Tablas ────────────────────────────────────────────────── */
@@ -275,3 +276,19 @@ h1, h2, h3, .font-display { letter-spacing: 0; }
 
 /* Indicador del menú activo con los colores del tejido */
 aside nav a .bg-gold { background: linear-gradient(180deg, #B3262A, #EFB52E, #2F5D3A) !important; }
+
+/* ── Móviles ─────────────────────────────────────────────────────────
+   iPhone acerca la pantalla al tocar un campo con letra menor a 16px y
+   no vuelve a alejarla (al iniciar sesión había que quitar el zoom a mano).
+   En pantallas táctiles/angostas los campos usan 16px como mínimo. */
+@media (max-width: 1023px), (pointer: coarse) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([class*="text-lg"]):not([class*="text-2xl"]):not([class*="text-4xl"]),
+    select:not([class*="text-lg"]),
+    textarea {
+        font-size: 16px !important;
+    }
+}
+/* Nada debe ensanchar la página: las tablas y filas de chips ya se desplazan
+   dentro de su propio contenedor. */
+html, body { overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
