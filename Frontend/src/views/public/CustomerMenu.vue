@@ -361,7 +361,7 @@ const metodos = [
   { id: 'tarjeta', label: 'Tarjeta', desc: 'Llevamos la terminal a tu mesa', icon: PhCreditCard },
   { id: 'dividir', label: 'Dividir la cuenta', desc: 'Por platillo o por persona', icon: PhUsersThree },
 ]
-let poll = null, ctx = null, observer = null
+let poll = null, pollMenu = null, ctx = null, observer = null
 
 const agotado = (p) => !p.disponible || agotadosSet.value.has(p.id)
 const porCategoria = (id) => productos.value.filter(p => p.categoria_id === id)
@@ -417,6 +417,23 @@ const refrescar = async () => {
     if (e.status === 404) errorQr.value = e.message
   }
 }
+
+const recargarMenu = async () => {
+  try {
+    const m = await publicService.menu()
+    const nuevasCats = m.categorias.map(c => c.id).join() !== categorias.value.map(c => c.id).join()
+    restaurante.value = m.restaurante
+    categorias.value = m.categorias
+    productos.value = m.productos
+    if (!token) {
+      abierto.value = m.abierto
+      agotadosSet.value = new Set(m.productos.filter(p => !p.disponible).map(p => p.id))
+    }
+    if (nuevasCats) { await nextTick(); observer?.disconnect(); iniciarSpy() }
+  } catch { /* se reintenta en el siguiente ciclo */ }
+}
+// Al volver a la pestaña (ej. el cliente bloqueó el celular) se actualiza de inmediato
+const alVolver = () => { if (!document.hidden) { recargarMenu(); refrescar() } }
 
 // ── Llamados ──
 const confirmarLlamado = (tipo) => { hoja.value = 'confirmar-' + tipo }
@@ -517,16 +534,11 @@ onMounted(async () => {
     }, root.value)
   }, reduced() ? 0 : 500)
   if (token) poll = setInterval(() => { if (!document.hidden) refrescar() }, 5000)
-  else poll = setInterval(async () => {
-    if (document.hidden) return
-    try {
-      const m = await publicService.menu()
-      abierto.value = m.abierto
-      agotadosSet.value = new Set(m.productos.filter(p => !p.disponible).map(p => p.id))
-    } catch { /* se reintenta en el siguiente ciclo */ }
-  }, 20000)
+  // Platillos nuevos, cambios de precio o de foto: la carta completa se recarga cada 30 s
+  pollMenu = setInterval(() => { if (!document.hidden) recargarMenu() }, 30000)
+  document.addEventListener('visibilitychange', alVolver)
 })
-onUnmounted(() => { clearInterval(poll); ctx?.revert(); observer?.disconnect() })
+onUnmounted(() => { clearInterval(poll); clearInterval(pollMenu); document.removeEventListener('visibilitychange', alVolver); ctx?.revert(); observer?.disconnect() })
 </script>
 
 <style scoped>

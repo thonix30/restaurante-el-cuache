@@ -84,7 +84,7 @@
         <button type="button" class="switch" :class="{ on: f.disponible }" role="switch" :aria-checked="f.disponible" @click="f.disponible = !f.disponible" />
       </label>
       <label class="flex items-center justify-between gap-3 cursor-pointer">
-        <span><b class="text-sm text-ink block">Controlar stock</b><span class="text-xs text-ink-3">Se agota solo al llegar a 0</span></span>
+        <span><b class="text-sm text-ink block">Controlar stock</b><span class="text-xs text-ink-3">Solo para productos que se pueden contar: gaseosas, agua, postres empacados. Se agota solo al llegar a 0. Los platillos de cocina no lo necesitan.</span></span>
         <button type="button" class="switch" :class="{ on: f.controla_stock }" role="switch" :aria-checked="f.controla_stock" @click="f.controla_stock = !f.controla_stock" />
       </label>
       <div v-if="f.controla_stock" class="grid grid-cols-2 gap-3">

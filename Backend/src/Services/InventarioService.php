@@ -53,6 +53,11 @@ class InventarioService
         $id = Database::transaction(function () use ($dto) {
             $p = $this->productos->findRaw($dto->producto_id, true);
             if (!$p) throw HttpException::notFound('El producto no existe.');
+            // El inventario es para productos contables (gaseosas, agua, postres empacados).
+            // Los platillos de cocina no llevan una cantidad fija.
+            if (!(int)$p['controla_stock']) {
+                throw HttpException::invalid("«{$p['nombre']}» no lleva control de stock. Actívalo en Carta y mesas si es un producto empacado.", ['errors' => ['producto_id' => 'Este producto no lleva inventario.']]);
+            }
             $id = $this->compras->create([
                 'proveedor' => $dto->proveedor,
                 'producto_id' => $dto->producto_id,
@@ -62,9 +67,7 @@ class InventarioService
                 'notas' => $dto->notas,
                 'registrado_por' => Auth::id(),
             ]);
-            $upd = ['costo' => $dto->costo_unitario];
-            if (!(int)$p['controla_stock']) $upd['controla_stock'] = 1; // comprar implica controlar stock
-            $this->productos->save($dto->producto_id, $upd);
+            $this->productos->save($dto->producto_id, ['costo' => $dto->costo_unitario]);
             $this->productos->addStock($dto->producto_id, $dto->cantidad);
             (new ProductoService())->reactivarPorStockSiCorresponde($dto->producto_id);
 
