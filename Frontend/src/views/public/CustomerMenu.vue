@@ -32,6 +32,9 @@
           <div class="flex items-center justify-between pt-4">
             <BrandLogo :size="64" tone="cream" class="drop-shadow-lg w-14 h-14 sm:w-16 sm:h-16" />
             <div class="flex items-center gap-2">
+              <router-link v-if="!token && auth.isAuthenticated" :to="auth.home" class="btn btn-sm bg-black/30 text-[#F5ECDC] border border-white/15 backdrop-blur">
+                <PhArrowLeft :size="16" /> Volver al sistema
+              </router-link>
               <button class="btn btn-icon bg-black/30 text-[#F5ECDC] border border-white/15 backdrop-blur" :aria-label="ui.theme === 'dark' ? 'Modo claro' : 'Modo oscuro'" @click="ui.toggleTheme">
                 <component :is="ui.theme === 'dark' ? PhSun : PhMoonStars" :size="18" />
               </button>
@@ -308,7 +311,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   PhQrCode, PhMapPin, PhStar, PhPlus, PhProhibit, PhShoppingBagOpen, PhBellRinging, PhReceipt, PhWarningCircle,
-  PhTrash, PhCookingPot, PhCaretRight, PhMoney, PhCreditCard, PhUsersThree, PhSun, PhMoonStars,
+  PhTrash, PhCookingPot, PhCaretRight, PhMoney, PhCreditCard, PhUsersThree, PhSun, PhMoonStars, PhArrowLeft,
 } from '@phosphor-icons/vue'
 import BrandLogo from '@/components/ui/BrandLogo.vue'
 import Modal from '@/components/ui/Modal.vue'
@@ -319,12 +322,14 @@ import CatIcon from '@/components/ui/CatIcon.vue'
 import { publicService } from '@/services'
 import { useCartStore } from '@/stores/cart'
 import { useUiStore } from '@/stores/ui'
+import { useAuthStore } from '@/stores/auth'
 import { money, hace } from '@/utils/format'
 import { gsap, reduced, flyTo } from '@/composables/useMotion'
 import { setServerTime, useNow } from '@/composables/useNow'
 
 const route = useRoute()
 const ui = useUiStore()
+const auth = useAuthStore()
 const cart = useCartStore()
 const { now } = useNow()
 

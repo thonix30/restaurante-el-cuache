@@ -4,6 +4,8 @@ namespace App\Controllers;
 use App\Attributes\Authorize;
 use App\Attributes\Route;
 use App\Core\Controller;
+use App\Core\HttpException;
+use App\Utils\Auth;
 use App\DTOs\PagoDTO;
 use App\DTOs\PedidoDTO;
 use App\Services\CocinaService;
@@ -125,6 +127,12 @@ class SalonController extends Controller
     #[Authorize(['Admin', 'Cocinero', 'Mesero'])]
     public function estadoComanda(string $id)
     {
-        $this->ok((new CocinaService())->cambiarEstado((int)$id, $this->input('estado')));
+        $estado = $this->input('estado');
+        // El mesero solo sirve: marca como entregado lo que cocina ya dejó listo.
+        // Empezar, terminar o regresar una comanda es tarea de cocina.
+        if (Auth::user()['rol'] === 'Mesero' && $estado !== 'entregado') {
+            throw HttpException::forbidden('Solo cocina puede cambiar el avance de una comanda. Tú puedes marcarla como entregada.');
+        }
+        $this->ok((new CocinaService())->cambiarEstado((int)$id, $estado));
     }
 }

@@ -1,7 +1,7 @@
 import {
     PhChartLineUp, PhSquaresFour, PhNotePencil, PhBellRinging, PhCookingPot, PhToggleRight, PhForkKnife,
     PhPackage, PhCashRegister, PhClockCounterClockwise, PhShieldCheck, PhQrCode, PhUsersThree, PhCalendarDots,
-    PhFingerprint, PhTray, PhGear, PhUserCircle,
+    PhFingerprint, PhTray, PhGear, PhUserCircle, PhBookOpenText,
 } from '@phosphor-icons/vue'
 
 /**
@@ -14,6 +14,7 @@ export const NAV = [
         { to: '/salon', label: 'Salón', icon: PhSquaresFour, roles: ['Admin', 'Mesero'], mobile: 2 },
         { to: '/pedido', label: 'Tomar pedido', short: 'Pedido', icon: PhNotePencil, roles: ['Admin', 'Mesero'], mobile: 3 },
         { to: '/avisos', label: 'Avisos', icon: PhBellRinging, roles: ['Mesero'], mobile: 4, badge: 'avisos' },
+        { to: '/carta', label: 'Carta para clientes', short: 'Carta', icon: PhBookOpenText, roles: ['Admin', 'Mesero'] },
         { to: '/cocina', label: 'Cocina', icon: PhCookingPot, roles: ['Admin', 'Cocinero'], mobile: 1, badge: 'cocina' },
         { to: '/disponibilidad', label: 'Disponibilidad', short: 'Agotados', icon: PhToggleRight, roles: ['Admin', 'Cocinero'], mobile: 2 },
         { to: '/caja', label: 'Caja', icon: PhCashRegister, roles: ['Admin'], mobile: 4 },

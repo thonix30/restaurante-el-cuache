@@ -54,9 +54,14 @@ class CocinaService
             if (in_array($c['estado'], ['entregado', 'cancelado'], true) && $estado === null) {
                 throw HttpException::conflict('La comanda ya fue entregada.');
             }
+            if ($c['estado'] === 'cancelado') throw HttpException::conflict('La comanda fue cancelada.');
             $nuevo = $estado ?? (self::FLUJO[$c['estado']] ?? null);
             $validos = ['pendiente', 'preparacion', 'listo', 'entregado'];
             if (!$nuevo || !in_array($nuevo, $validos, true)) throw HttpException::invalid('Estado inválido.');
+            // Un mesero solo entrega lo que cocina ya marcó como listo
+            if ($nuevo === 'entregado' && $c['estado'] !== 'listo' && (\App\Utils\Auth::user()['rol'] ?? null) === 'Mesero') {
+                throw HttpException::conflict('Esta comanda todavía no está lista en cocina.');
+            }
 
             $data = ['estado' => $nuevo];
             if (isset(self::SELLO[$nuevo])) $data[self::SELLO[$nuevo]] = date('Y-m-d H:i:s');
