@@ -24,3 +24,6 @@ capturas/
 Thumbs.db
 .vscode/
 .idea/
+
+# Exportaciones de la base con datos (no se versionan)
+Database/export/
