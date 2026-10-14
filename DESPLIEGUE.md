@@ -15,7 +15,7 @@ El workflow `.github/workflows/deploy.yml` hace **CI/CD** (GitHub → pestaña *
 | Etapa | Cuándo corre | Qué hace |
 |---|---|---|
 | **CI · Verificar y compilar** | En cada push a cualquier rama y en cada Pull Request | Revisa la sintaxis de todo el PHP, compila el sistema y arma la carpeta de despliegue. Si falla, el PR muestra ❌. |
-| **CD · Desplegar en Hostinger** | Solo cuando cambia `main` (o a mano) y si CI pasó | Sube por FTP y comprueba que el sitio, el sistema y la API respondan. |
+| **CD · Desplegar en Hostinger** | Solo cuando cambia `main` (o a mano) y si CI pasó | Sincroniza por **SSH + rsync** (solo sube lo que cambió) y comprueba que el sitio, el sistema y la API respondan. |
 
 ---
 
@@ -48,16 +48,21 @@ Este archivo **no está en GitHub** y el despliegue **nunca lo pisa**. `app.loca
 
 > La carpeta `Backend/config/` aparece después del primer despliegue (paso 4). Si quieres, crea el archivo justo después.
 
-### 4. Secretos de GitHub
-Repositorio → **Settings → Secrets and variables → Actions → New repository secret**. Son los mismos datos FTP que usa El Jardín:
+### 4. Acceso SSH y secreto de GitHub
+**Servidor SSH:** `u622087758@145.79.4.70`, puerto `65002` (hPanel → Avanzado → Acceso SSH).
 
-| Secreto | Valor |
-|---|---|
-| `FTP_SERVER` | Servidor FTP (hPanel → Archivos → Cuentas FTP), ej. `ftp.thonixdev.es` o la IP |
-| `FTP_USERNAME` | Usuario FTP |
-| `FTP_PASSWORD` | Contraseña FTP |
+1. La llave de despliegue está en tu PC: `C:\Users\ANTHONY\.ssh\elcuache_deploy` (privada) y `elcuache_deploy.pub` (pública).
+2. La **pública** se registra en hPanel → Acceso SSH → **Claves SSH** (nombre `deploy-elcuache`).
+3. La **privada** va en GitHub → repositorio → **Settings → Secrets and variables → Actions → New repository secret**:
+   - **Nombre:** `SSH_PRIVATE_KEY`
+   - **Valor:** el contenido completo del archivo, incluidas las líneas `-----BEGIN…` y `-----END…`.
 
-El despliegue sube a la carpeta `restaurantelcuache/` relativa a la raíz de esa cuenta FTP (igual que El Jardín usa `restaurante-el-jardin/`). Si tu cuenta FTP empieza en otra carpeta, crea la **variable** `FTP_SERVER_DIR` (pestaña *Variables*) con la ruta correcta, terminada en `/`.
+   Para copiarla al portapapeles, en PowerShell: `Get-Content $env:USERPROFILE\.ssh\elcuache_deploy -Raw | Set-Clipboard`
+
+Para entrar tú al servidor desde la terminal:
+```
+ssh -i ~/.ssh/elcuache_deploy -p 65002 u622087758@145.79.4.70
+```
 
 ### 5. Primer despliegue
 GitHub → **Actions → "CI/CD · El Cuache → Hostinger" → Run workflow** (rama `main`), o haz un push a `main`.
@@ -77,6 +82,6 @@ GitHub → **Actions → "CI/CD · El Cuache → Hostinger" → Run workflow** (
   - `Backend/storage/documentos` y `Backend/storage/asistencia` (archivos privados).
 
 ## Si algo falla
-- **La pestaña Actions marca error en "Subir por FTP":** revisa los tres secretos y la carpeta.
+- **La pestaña Actions marca error en "Preparar la llave SSH" o "Probar la conexión":** revisa el secreto `SSH_PRIVATE_KEY` y que la llave pública siga registrada en hPanel.
 - **El sistema dice "No se pudo conectar con la base de datos":** revisa `database.local.php`.
 - **Ves una versión vieja:** recarga con **Ctrl + F5**. El sistema es una app instalable y se actualiza sola en la siguiente visita.
