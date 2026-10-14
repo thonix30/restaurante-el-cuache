@@ -138,6 +138,9 @@ Flujo de una petición: `Router` → lee los atributos `#[Route]`/`#[Authorize]`
 
 ## Producción
 
+**Hostinger:** ver [DESPLIEGUE.md](DESPLIEGUE.md). Despliegue automático a https://restaurantelcuache.thonixdev.es en cada push a `main`.
+
+
 - Crea `Backend/config/database.local.php` y `Backend/config/app.local.php` (devuelven un array con las claves a reemplazar).
 - Cambia `jwt_secret`. **No cambies `pin_secret`** después de asignar los PIN: dejarían de coincidir.
 - Si la carpeta del sistema cambia, la app calcula sola la URL de la API (`../../Backend/api/v1`). Para otro dominio, define `VITE_API_URL` al compilar.
