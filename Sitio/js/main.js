@@ -77,7 +77,6 @@ ScrollTrigger.create({
         nav.classList.toggle('oculta', self.direction === 1 && self.scroll() > window.innerHeight * .9 && !menuAbierto)
     },
 })
-gsap.to('.progreso', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .3 } })
 
 /* ── Preloader: el hilo se teje mientras cargan fuentes y la foto ───── */
 const esperarCarga = Promise.all([
