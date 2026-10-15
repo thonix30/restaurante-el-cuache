@@ -297,15 +297,6 @@ async function cargarCarta() {
 }
 cargarCarta()
 
-/* ── Créditos de fotos (licencias de Wikimedia Commons) ──────────────── */
-fetch('img/creditos.json').then(r => r.json()).then(c => {
-    const nombres = { pueblo: 'San Antonio Huista', escudo: 'Escudo de San Antonio Huista', jacaltecas: 'Mujeres jacaltecas', chirimia: 'Chirimía en Jacaltenango',
-        cuchumatanes: 'Sierra de los Cuchumatanes', mercado: 'Mercado de Colotenango', pepian: 'Pepián', tamal: 'Tamal colorado', chuchito: 'Chuchito', atol: 'Atol de elote',
-        frijoles: 'Frijoles negros', tortillera: 'Tortillas en comal de leña', comal: 'Tortillas en comal', conquista: 'Baile de la Conquista', marimba: 'Marimba', maiz: 'Derivados del maíz tierno' }
-    $('#creditos').innerHTML = Object.entries(c).filter(([k]) => nombres[k]).map(([k, v]) =>
-        `<li>${esc(nombres[k])} — ${esc(v.autor)} · <a href="${esc(v.pagina)}" target="_blank" rel="noopener">${esc(v.licencia)}</a></li>`).join('')
-}).catch(() => {})
-
 /* ── Cursor y botones magnéticos (solo con mouse) ────────────────────── */
 let cursorListo = false
 function activarCursor() {

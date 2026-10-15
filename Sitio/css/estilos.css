@@ -303,10 +303,6 @@ p { margin: 0 0 1em; }
 .pie__marca img { width: 120px; }
 .pie__grande { font-family: var(--f-rotulo); font-size: clamp(3.5rem, 15vw, 15rem); line-height: .85; color: var(--masa); margin: 3rem 0 2rem; overflow: hidden; }
 .pie__grande span { display: inline-block; }
-.creditos { border-top: 1px solid rgba(243,228,197,.15); padding-top: 1.5rem; font-size: .76rem; color: rgba(243,228,197,.55); }
-.creditos summary { cursor: pointer; font-weight: 700; color: rgba(243,228,197,.75); }
-.creditos ul { columns: 2; column-gap: 2rem; padding-left: 1rem; margin: 1rem 0 0; }
-.creditos li { margin-bottom: .35rem; break-inside: avoid; }
 .pie__legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: 2rem; font-size: .8rem; color: rgba(243,228,197,.5); }
 .pie__legal a { color: rgba(243,228,197,.7); }
 
@@ -334,7 +330,6 @@ p { margin: 0 0 1em; }
 @media (max-width: 600px) {
     .carta__grid { grid-template-columns: 1fr; }
     .datos { grid-template-columns: 1fr; }
-    .creditos ul { columns: 1; }
     .plato__texto { padding: 1.6rem 1.4rem 2rem; justify-content: flex-start; }
     .plato__num { font-size: 4.5rem; top: 1rem; right: 1rem; }
     .plato__desc { font-size: 1rem; margin-top: .9rem; }
