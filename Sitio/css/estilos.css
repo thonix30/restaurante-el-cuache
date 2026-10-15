@@ -99,8 +99,6 @@ p { margin: 0 0 1em; }
 .cortina span:nth-child(5) { background: var(--achiote); }
 
 /* ── Navegación ───────────────────────────────────────────────────────── */
-.progreso { position: fixed; top: 0; left: 0; right: 0; height: 5px; z-index: 120; transform-origin: left; transform: scaleX(0);
-    background: linear-gradient(90deg, var(--cochinilla), var(--achiote), var(--maiz), var(--monte), var(--anil)); }
 .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 110;
     display: flex; align-items: center; gap: 1.5rem;
