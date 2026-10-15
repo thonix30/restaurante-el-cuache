@@ -7,8 +7,8 @@
         <router-link :to="auth.home" class="flex items-center gap-3 min-w-0" aria-label="Inicio">
           <BrandLogo :size="48" class="shrink-0 drop-shadow" />
           <div v-if="!collapsed" class="min-w-0 leading-tight">
-            <p class="font-serif text-xl text-ink">El Cuache</p>
-            <p class="text-[10px] uppercase tracking-[.2em] text-gold">Café · Restaurante</p>
+            <p class="font-serif text-2xl text-ink leading-none">El Cuache</p>
+            <p class="text-[10px] uppercase tracking-[.24em] text-gold font-bold mt-1">San Antonio Huista</p>
           </div>
         </router-link>
       </div>
@@ -31,7 +31,8 @@
         </div>
       </nav>
 
-      <div class="p-3 border-t border-line/60">
+      <div class="faja-tejida" aria-hidden="true" />
+      <div class="p-3">
         <div class="flex items-center gap-3 p-2 rounded-xl" :class="collapsed ? 'justify-center' : ''">
           <Avatar :src="auth.usuario?.foto" :name="auth.usuario?.nombre" :puesto="auth.usuario?.puesto" :size="38" dot="ok" />
           <div v-if="!collapsed" class="min-w-0 flex-1 leading-tight">
@@ -50,7 +51,7 @@
 
     <!-- ═══ Contenido ═══ -->
     <div class="flex-1 min-w-0 flex flex-col relative z-10">
-      <header class="sticky top-0 z-20 glass border-b border-line/50">
+      <header class="sticky top-0 z-20 glass">
         <div class="flex items-center gap-2 sm:gap-3 h-16 px-4 sm:px-6">
           <router-link :to="auth.home" class="lg:hidden shrink-0" aria-label="Inicio"><BrandLogo :size="40" /></router-link>
           <div class="min-w-0 flex-1">
@@ -76,6 +77,7 @@
             <Avatar :src="auth.usuario?.foto" :name="auth.usuario?.nombre" :puesto="auth.usuario?.puesto" :size="36" />
           </button>
         </div>
+        <div class="faja-tejida" aria-hidden="true" />
       </header>
 
       <main ref="mainEl" class="flex-1 pb-28 lg:pb-10" :class="route.meta.full ? 'px-3 sm:px-5 pt-4' : 'px-4 sm:px-6 lg:px-10 pt-6 lg:pt-8'">

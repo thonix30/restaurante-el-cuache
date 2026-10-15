@@ -163,7 +163,7 @@ const pdf = () => {
   if (!w) return ui.toast('Permite las ventanas emergentes', 'warn')
   const filas = rep.value.filas.map(f => `<tr><td>${f.empleado.nombre}<br><small>${f.empleado.puesto}</small></td><td>${f.dias_trabajados}</td><td>${f.horas_normales}</td><td>${f.horas_extra}</td><td>${f.faltas}</td><td>${f.tardanzas}</td><td>${f.puntualidad ?? '—'}${f.puntualidad != null ? '%' : ''}</td><td>${money(f.propinas)}</td><td><b>${money(f.pago_estimado)}</b></td></tr>`).join('')
   w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reporte de horas</title>
-  <style>body{font-family:Manrope,Arial,sans-serif;color:#231F1C;margin:28px}h1{font-family:Georgia,serif;font-weight:500;margin:0}
+  <style>body{font-family:"Familjen Grotesk",Arial,sans-serif;color:#231F1C;margin:28px}h1{font-family:Georgia,serif;font-weight:500;margin:0}
   table{width:100%;border-collapse:collapse;margin-top:18px;font-size:12px}th,td{padding:7px 8px;border-bottom:1px solid #ddd;text-align:right}th:first-child,td:first-child{text-align:left}
   th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#7a6d5e}small{color:#888}.tot{display:flex;gap:28px;margin-top:14px;font-size:13px}</style></head><body>
   <div style="display:flex;align-items:center;gap:14px"><img src="${new URL('./img/logo-ink.png', location.href.split('#')[0]).href}" width="64"><div><h1>Reporte de horas</h1><div>El Cuache · ${rep.value.desde} a ${rep.value.hasta}</div></div></div>

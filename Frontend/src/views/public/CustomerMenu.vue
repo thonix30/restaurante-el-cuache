@@ -545,7 +545,7 @@ onUnmounted(() => { clearInterval(poll); clearInterval(pollMenu); document.remov
 .ribbon {
   position: relative;
   padding: .45rem 2.6rem;
-  font: 800 .78rem/1 Manrope, sans-serif;
+  font: 800 .78rem/1 "Familjen Grotesk", sans-serif;
   letter-spacing: .28em;
   text-transform: uppercase;
   color: rgb(var(--on-gold));

@@ -18,7 +18,7 @@
       <path ref="areaEl" :d="area(values)" :fill="`url(#${gid})`" />
       <path ref="lineEl" :d="line(values)" fill="none" stroke="rgb(var(--gold))" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
       <!-- etiquetas X -->
-      <text v-for="(l, i) in labels" v-show="showLabel(i)" :key="'x' + i" :x="x(i)" :y="H - 6" text-anchor="middle" class="fill-ink-3" style="font: 500 10px Manrope">{{ l }}</text>
+      <text v-for="(l, i) in labels" v-show="showLabel(i)" :key="'x' + i" :x="x(i)" :y="H - 6" text-anchor="middle" class="fill-ink-3" style="font: 500 10px 'Familjen Grotesk'">{{ l }}</text>
       <!-- crosshair -->
       <g v-if="hover != null">
         <line :x1="x(hover)" :x2="x(hover)" :y1="P.t" :y2="H - P.b" stroke="rgb(var(--ink-2))" stroke-opacity=".35" />
